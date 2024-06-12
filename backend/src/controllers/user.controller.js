@@ -173,4 +173,44 @@ const logoutUser = async (req, res) => {
   }
 };
 
-export { registerUser, loginUser, logoutUser };
+const changePassword = async (req, res) => {
+  try {
+    const { oldPassword, newPassword } = req.body;
+
+    if (!oldPassword || !newPassword) {
+      return res.status(400).json({
+        message: "Please provide both old and new passwords",
+      });
+    }
+
+    const user = await User.findById(req.user?._id);
+
+    if (!user) {
+      return res.status(400).json({
+        message: "User not found",
+      });
+    }
+
+    const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
+
+    if (!isPasswordCorrect) {
+      return res.status(400).json({
+        message: "Old password is incorrect",
+      });
+    }
+
+    user.password = newPassword;
+    await user.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+      message: "password updated successfully",
+    });
+  } catch (error) {
+    console.error("Error while update the password:", error);
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
+export { registerUser, loginUser, logoutUser, changePassword };
