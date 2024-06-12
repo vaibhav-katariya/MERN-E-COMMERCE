@@ -89,7 +89,48 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   try {
-    const {email, password} = req.body
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        message: "email and password must be required",
+      });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "user not found",
+      });
+    }
+
+    const correctPassword = await user.isPasswordCorrect(password);
+
+    if (!correctPassword) {
+      return res.status(400).json({
+        message: "email or passwrod invalid",
+      });
+    }
+
+    const { accessToken, refreshToken } = await genAccessTokenAndRefreshToken(
+      user._id
+    );
+
+    const loginUser = await User.findById(user._id).select(
+      "-password -refreshToken"
+    );
+
+    const option = {
+      httpOnly: true,
+      secure: true,
+    };
+
+    res.status(200).json({
+      accessToken,
+      refreshToken,
+      loginUser,
+    });
   } catch (error) {
     console.error("Error while login the user:", error);
     res.status(500).json({
@@ -98,4 +139,4 @@ const loginUser = async (req, res) => {
   }
 };
 
-export { registerUser , loginUser };
+export { registerUser, loginUser };
