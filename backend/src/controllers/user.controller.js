@@ -126,11 +126,13 @@ const loginUser = async (req, res) => {
       secure: true,
     };
 
-    res.status(200).json({
-      accessToken,
-      refreshToken,
-      loginUser,
-    });
+    res
+      .status(200)
+      .cookie("accessToken", accessToken, option)
+      .cookie("refreshToken", refreshToken, option)
+      .json({
+        loginUser,
+      });
   } catch (error) {
     console.error("Error while login the user:", error);
     res.status(500).json({
@@ -139,4 +141,36 @@ const loginUser = async (req, res) => {
   }
 };
 
-export { registerUser, loginUser };
+const logoutUser = async (req, res) => {
+  try {
+    await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $set: { refreshToken: "" },
+      },
+      {
+        new: true,
+      }
+    );
+
+    const option = {
+      httpOnly: true,
+      secure: true,
+    };
+
+    res
+      .status(200)
+      .clearCookie("accessToken", option)
+      .clearCookie("refreshToken", option)
+      .json({
+        message: "User logged out successfully",
+      });
+  } catch (error) {
+    console.error("Error while logout the user:", error);
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
+export { registerUser, loginUser, logoutUser };
