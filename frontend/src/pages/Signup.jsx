@@ -1,12 +1,14 @@
+import axios from "axios";
 import React, { useRef, useState } from "react";
 import { BsCloudUpload } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const Signup = () => {
   const [data, setData] = useState({
     username: "",
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
   const [image, setImage] = useState(null);
 
   const imageRef = useRef();
@@ -23,24 +25,38 @@ const Signup = () => {
     setImage(e.target.files[0]);
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(data);
-    console.log(image);
+    const formData = new FormData();
+    formData.append("username", data.username);
+    formData.append("email", data.email);
+    formData.append("password", data.password);
+    formData.append("avatar", image);
+
+    try {
+      const res = await axios.post("/api/v1/user/register", formData);
+      if (res.data) {
+        navigate("/login");
+      }
+    } catch (error) {
+      console.log("sign up error ", error);
+    }
   };
   return (
     <div className="h-screen w-full text-zinc-800 flex flex-col justify-center items-center">
       <form
         onSubmit={submitHandler}
-        className="border-[1px] md:w-1/2 border-zinc-300 md:p-10 rounded-lg p-5"
+        className="border-[1px] md:w-1/2 border-zinc-400 md:p-10 rounded-lg p-5"
       >
-        <h2 className="text-center mb-3 text-2xl text-zinc-400">Sign up</h2>
+        <h2 className="text-center mb-3 text-2xl text-zinc-400 font-semibold">
+          Sign up
+        </h2>
         <div>
           <input
             value={data.username}
             onChange={handleChange}
             required
-            className="border-[1px] border-zinc-200 w-full  px-3 py-2 placeholder:text-lg my-3 rounded-lg  outline-none"
+            className="border-[1px] border-zinc-300 w-full  px-3 py-2 placeholder:text-lg my-3 rounded-lg  outline-none"
             type="text"
             name="username"
             placeholder="Name"
@@ -52,7 +68,7 @@ const Signup = () => {
             value={data.email}
             onChange={handleChange}
             required
-            className="border-[1px] border-zinc-200 w-full px-3  py-2 placeholder:text-lg my-3 rounded-lg  outline-none"
+            className="border-[1px] border-zinc-300 w-full px-3  py-2 placeholder:text-lg my-3 rounded-lg  outline-none"
             type="email"
             name="email"
             placeholder="Email"
@@ -64,7 +80,7 @@ const Signup = () => {
             value={data.password}
             onChange={handleChange}
             required
-            className="border-[1px] border-zinc-200 w-full  px-3 py-2 placeholder:text-lg my-3 rounded-lg  outline-none"
+            className="border-[1px] border-zinc-300 w-full  px-3 py-2 placeholder:text-lg my-3 rounded-lg  outline-none"
             type="password"
             placeholder="Password"
             name="password"
