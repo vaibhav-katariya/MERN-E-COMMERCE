@@ -213,4 +213,107 @@ const changePassword = async (req, res) => {
   }
 };
 
-export { registerUser, loginUser, logoutUser, changePassword };
+const getCorrentUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.user?._id).select(
+      "-password -refreshToken"
+    );
+
+    if (!user) {
+      return res.status(400).json({
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      user,
+    });
+  } catch (error) {
+    console.error("Error while get the user:", error);
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
+const updateUserDetails = async (req, res) => {
+  const { username, email } = req.body;
+
+  try {
+    const user = await User.findById(req.user?._id);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    let updatedFields = {};
+
+    if (req.files?.avatar) {
+      const avatarPath = req.files.avatar[0].path;
+
+      const avatar_public_id = user.avatar.split("/").pop().split(".")[0];
+
+      await fileDeleteOnCloudinary(avatar_public_id);
+
+      const avatar = await fileUploadOnCloudinary(avatarPath);
+
+      if (!avatar || !avatar.url) {
+        return res.status(500).json({
+          message: "Failed to upload avatar",
+        });
+      }
+      updatedFields.avatar = avatar.url;
+    }
+
+    if (username && username !== user.username) {
+      updatedFields.username = username;
+    }
+
+    if (email && email !== user.email) {
+      updatedFields.email = email;
+    }
+
+    const updateUser = await User.findByIdAndUpdate(
+      req.user?._id,
+      { $set: updatedFields },
+      { new: true }
+    ).select("-password -refreshToken");
+
+    if (!updateUser) {
+      return res.status(500).json({
+        message: "Failed to update user details",
+      });
+    }
+
+    const { accessToken, refreshToken } = await genAccessTokenAndRefreshToken(
+      user._id
+    );
+
+    const option = {
+      httpOnly: true,
+      secure: true,
+    };
+
+    res
+      .status(200)
+      .cookie("accessToken", accessToken, option)
+      .cookie("refreshToken", refreshToken, option)
+      .json({
+        message: "User details updated successfully",
+        updateUser,
+      });
+  } catch (error) {
+    console.error("Error while update the user:", error);
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
+export {
+  registerUser,
+  loginUser,
+  logoutUser,
+  changePassword,
+  getCorrentUser,
+  updateUserDetails,
+};
