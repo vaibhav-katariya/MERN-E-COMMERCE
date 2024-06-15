@@ -26,6 +26,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    role: {
+      type: String,
+      enum: ["user", "admin", "saler"],
+      default: "user",
+    },
     refreshToken: {
       type: String,
     },
@@ -33,19 +38,19 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-userSchema.pre("save", async function(next){
+userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   const salt = await bcryptjs.genSalt(10);
   this.password = await bcryptjs.hash(this.password, salt);
   next();
 });
 
-userSchema.methods.isPasswordCorrect = async function(password) {
+userSchema.methods.isPasswordCorrect = async function (password) {
   if (!password) return false;
   return await bcryptjs.compare(password, this.password);
 };
 
-userSchema.methods.genRefreshToken = function (){
+userSchema.methods.genRefreshToken = function () {
   return jwt.sign(
     {
       id: this._id,
@@ -57,7 +62,7 @@ userSchema.methods.genRefreshToken = function (){
   );
 };
 
-userSchema.methods.genAccessToken =function () {
+userSchema.methods.genAccessToken = function () {
   return jwt.sign(
     {
       id: this._id,

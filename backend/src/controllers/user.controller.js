@@ -26,7 +26,7 @@ const genAccessTokenAndRefreshToken = async (userId) => {
 
 const registerUser = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, role } = req.body;
 
     if (!username || !email || !password) {
       return res.status(400).json({
@@ -64,6 +64,7 @@ const registerUser = async (req, res) => {
       username,
       email,
       password,
+      role,
       avatar: avatar.url,
     });
 

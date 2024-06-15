@@ -7,7 +7,11 @@ const Signup = () => {
     username: "",
     email: "",
     password: "",
+    role: "user",
   });
+
+  console.log(data);
+
   const navigate = useNavigate();
   const [image, setImage] = useState(null);
 
@@ -32,6 +36,7 @@ const Signup = () => {
     formData.append("email", data.email);
     formData.append("password", data.password);
     formData.append("avatar", image);
+    formData.append("role", data.role);
 
     try {
       const res = await axios.post("/api/v1/user/register", formData);
@@ -86,6 +91,17 @@ const Signup = () => {
             name="password"
             id="password"
           />
+        </div>
+        <div>
+          <select
+            className="border-[1px] text-slate-400 font-normal border-zinc-300 w-full  px-3 py-2 placeholder:text-lg my-3 rounded-lg  outline-none"
+            name="role"
+            value={data.role}
+            onChange={handleChange}
+          >
+            <option value="user">user</option>
+            <option value="saler">saller</option>
+          </select>
         </div>
         <div>
           <input
