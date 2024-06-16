@@ -15,6 +15,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import { Typography } from "@mui/material";
+import { IoCartSharp } from "react-icons/io5";
 
 const Header = () => {
   const user = useSelector((state) => state.user.user);
@@ -42,24 +43,24 @@ const Header = () => {
   };
 
   return (
-    <div className="h-14 shadow-lg border-b-2 flex items-center justify-between px-8">
-      <h1 className="text-xl font-semibold">MY STORE</h1>
+    <div className="h-14 shadow-lg border-b-2 flex items-center justify-between md:px-8 px-2">
+      <h1 className="md:text-xl text-md font-semibold">MY STORE</h1>
       <div className="h-[1.5rem] flex items-center">
         <input
           type="text"
           name="search"
           placeholder="Search Products....."
-          className="px-2 rounded-ss-lg border-e-0 rounded-es-lg outline-none py-1 border-[1px] border-zinc-700"
+          className="px-2 rounded-ss-lg border-e-0 rounded-es-lg outline-none py-1 border-[1px] border-zinc-700 w-32 md:w-full ms-2"
         />
         <button className="py-2 border-zinc-700 px-2 border-[1px] bg-zinc-700 text-white rounded-se-lg rounded-ee-lg">
           <FaSearch />
         </button>
       </div>
-      <div className="flex items-center gap-5">
+      <div className="flex items-center gap-2">
         <Box
           sx={{ display: "flex", alignItems: "center", textAlign: "center" }}
         >
-          <Tooltip title="Account settings">
+          <Tooltip title="Account">
             <IconButton
               onClick={handleClick}
               size="small"
@@ -117,7 +118,7 @@ const Header = () => {
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >
-          <Link to={"/profile"}>
+          <Link to={"/profile/userProfile"}>
             <MenuItem onClick={handleClose} to={"/profile"}>
               {user ? (
                 <div className="flex items-center gap-2">
@@ -137,7 +138,7 @@ const Header = () => {
             </MenuItem>
           </Link>
           <Divider />
-          <Link to={"/setting"}>
+          <Link to={"/setting/changeUserDetails"}>
             <MenuItem onClick={handleClose}>
               <ListItemIcon>
                 <Settings fontSize="small" />
@@ -160,6 +161,9 @@ const Header = () => {
             )}
           </MenuItem>
         </Menu>
+        <div className="text-3xl">
+          <IoCartSharp />
+        </div>
       </div>
     </div>
   );

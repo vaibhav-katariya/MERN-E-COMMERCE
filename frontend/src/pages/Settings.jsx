@@ -1,11 +1,11 @@
 import React from "react";
-import { Outlet } from "react-router";
 import { Link } from "react-router-dom";
+import SettingLayout from "../components/SettingLayout";
 
 const Settings = () => {
   return (
-    <div className="h-[87vh] w-full font-semibold  my-5 flex px-8">
-      <div className="w-1/6 h-full border-r-[1px] border-zinc-300 p-2">
+    <div className="min-h-[40vh] w-full font-semibold my-5 md:flex px-8">
+      <div className="md:w-1/6  md:border-r-[1px] border-zinc-300 p-2">
         <h1 className="text-2xl border-b-[1px] pb-2 border-zinc-400">
           Settings
         </h1>
@@ -22,8 +22,8 @@ const Settings = () => {
           </Link>
         </div>
       </div>
-      <div className="w-full h-full flex">
-        <Outlet />
+      <div className="w-full h-full md:my-5 ">
+        <SettingLayout />
       </div>
     </div>
   );

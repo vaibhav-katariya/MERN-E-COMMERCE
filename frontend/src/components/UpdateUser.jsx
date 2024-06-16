@@ -54,7 +54,7 @@ const UpdateUser = () => {
     <div className="h-full w-full text-zinc-800 flex flex-col justify-center items-center">
       <form
         onSubmit={submitHandler}
-        className="border-[1px] md:w-1/2 border-zinc-400 md:p-10 rounded-lg p-5"
+        className="border-[1px] md:w-1/2  border-zinc-400 md:p-10 rounded-lg p-5"
       >
         <h2 className="text-center mb-3 text-2xl text-zinc-400 font-semibold">
           Update User Details

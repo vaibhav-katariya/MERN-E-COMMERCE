@@ -18,6 +18,9 @@ import { store, persistor } from "./store/store.js";
 import Settings from "./pages/Settings.jsx";
 import UpdatePassword from "./components/UpdatePassword.jsx";
 import UpdateUser from "./components/UpdateUser.jsx";
+import UserProfile from "./components/UserProfile.jsx";
+import UploadProduct from "./components/UploadProduct.jsx";
+import GetAllProduct from "./components/GetAllProduct.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,7 +29,11 @@ const router = createBrowserRouter(
       <Route path="/" element={<Home />} />
       <Route path="login" element={<Login />} />
       <Route path="signup" element={<Signup />} />
-      <Route path="profile" element={<Profile />} />
+      <Route path="profile" element={<Profile />}>
+        <Route path="userProfile" element={<UserProfile />} />
+        <Route path="uploadProduct" element={<UploadProduct />} />
+        <Route path="getAllProduct" element={<GetAllProduct />} />
+      </Route>
       <Route path="setting" element={<Settings />}>
         <Route path="changePassword" element={<UpdatePassword />} />
         <Route path="changeUserDetails" element={<UpdateUser />} />
