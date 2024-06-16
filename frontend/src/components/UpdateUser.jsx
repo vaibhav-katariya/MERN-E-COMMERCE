@@ -1,66 +1,68 @@
 import axios from "axios";
 import React, { useRef, useState } from "react";
 import { BsCloudUpload } from "react-icons/bs";
-import { Link, useNavigate } from "react-router-dom";
-const Signup = () => {
-  const [data, setData] = useState({
-    username: "",
-    email: "",
-    password: "",
-    role: "user",
-  });
-
-  console.log(data);
-
-  const navigate = useNavigate();
-  const [image, setImage] = useState(null);
-
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../store/userSlice";
+const UpdateUser = () => {
+  const user = useSelector((state) => state.user.user);
+  console.log(user);
+  const dispatch = useDispatch();
   const imageRef = useRef();
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleFileChange = (e) => {
-    setImage(e.target.files[0]);
-  };
+  const [data, setData] = useState({
+    username: user?.username,
+    email: user?.email,
+    role: user?.role,
+  });
+  const [message, setMessage] = useState("");
+  const [newAvatar, setNewAvatar] = useState();
 
   const submitHandler = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("username", data.username);
     formData.append("email", data.email);
-    formData.append("password", data.password);
-    formData.append("avatar", image);
     formData.append("role", data.role);
 
+    if (newAvatar) {
+      formData.append("avatar", newAvatar);
+    }
+
     try {
-      const res = await axios.post("/api/v1/user/register", formData);
+      const res = await axios.put("/api/v1/user/update-user-details", formData);
+
       if (res.data) {
-        navigate("/login");
+        console.log(res.data.updateUser);
+        dispatch(login(res.data.updateUser));
+        setMessage("User updated successfully");
       }
     } catch (error) {
-      console.log("sign up error ", error);
+      console.log(error);
+      setMessage("Failed to update user details");
     }
   };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setNewAvatar(file);
+  };
+
+  const handleChange = (e) => {
+    setData((prevData) => ({ ...prevData, [e.target.name]: e.target.value }));
+  };
+
   return (
-    <div className="h-screen w-full text-zinc-800 flex flex-col justify-center items-center">
+    <div className="h-full w-full text-zinc-800 flex flex-col justify-center items-center">
       <form
         onSubmit={submitHandler}
         className="border-[1px] md:w-1/2 border-zinc-400 md:p-10 rounded-lg p-5"
       >
         <h2 className="text-center mb-3 text-2xl text-zinc-400 font-semibold">
-          Sign up
+          Update User Details
         </h2>
         <div>
           <input
             value={data.username}
             onChange={handleChange}
-            required
             className="border-[1px] border-zinc-300 w-full  px-3 py-2 placeholder:text-lg my-3 rounded-lg  outline-none"
             type="text"
             name="username"
@@ -72,24 +74,11 @@ const Signup = () => {
           <input
             value={data.email}
             onChange={handleChange}
-            required
             className="border-[1px] border-zinc-300 w-full px-3  py-2 placeholder:text-lg my-3 rounded-lg  outline-none"
             type="email"
             name="email"
             placeholder="Email"
             id="email"
-          />
-        </div>
-        <div>
-          <input
-            value={data.password}
-            onChange={handleChange}
-            required
-            className="border-[1px] border-zinc-300 w-full  px-3 py-2 placeholder:text-lg my-3 rounded-lg  outline-none"
-            type="password"
-            placeholder="Password"
-            name="password"
-            id="password"
           />
         </div>
         <div>
@@ -105,37 +94,31 @@ const Signup = () => {
         </div>
         <div>
           <input
-            required
             hidden
             ref={imageRef}
-            className="ms-4"
+            className="ms-4 "
             type="file"
             name="avatar"
             id="image"
             onChange={handleFileChange}
           />
           <div
-            className=" text-zinc-400 border-[1px] my-2 border-zinc-300 p-2 flex items-center gap-2 rounded-lg"
+            className="cursor-pointer text-zinc-400 border-[1px] my-2 border-zinc-300 p-2 flex items-center gap-2 rounded-lg"
             onClick={() => imageRef.current.click()}
           >
-            <BsCloudUpload /> Upload Profile Pic
+            <BsCloudUpload /> Upload Updated Profile Pic
           </div>
         </div>
         <button
           type="submit"
           className="py-2 w-full px-3 rounded-lg text-md text-white font-semibold mt-5 bg-blue-500"
         >
-          Creare Account
+          Update Account
         </button>
-        <p className="my-2 text-center">
-          Already have an account?{" "}
-          <Link to="/login" className="text-blue-500 underline">
-            Login
-          </Link>
-        </p>
+        <p className="my-2 text-center">{message}</p>
       </form>
     </div>
   );
 };
 
-export default Signup;
+export default UpdateUser;

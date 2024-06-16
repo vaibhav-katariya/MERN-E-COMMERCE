@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
+import { Typography } from "@mui/material";
 
 const Header = () => {
   const user = useSelector((state) => state.user.user);
@@ -116,16 +117,34 @@ const Header = () => {
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >
-          <MenuItem onClick={handleClose}>
-            <Avatar /> Profile
-          </MenuItem>
+          <Link to={"/profile"}>
+            <MenuItem onClick={handleClose} to={"/profile"}>
+              {user ? (
+                <div className="flex items-center gap-2">
+                  <img
+                    className="h-8 w-8 object-cover rounded-full"
+                    src={user?.avatar}
+                    alt={user?.username}
+                  />
+                  <Typography textAlign="center">{user?.username}</Typography>
+                </div>
+              ) : (
+                <div className="flex">
+                  <Avatar />
+                  <Typography textAlign="center">Profile</Typography>
+                </div>
+              )}
+            </MenuItem>
+          </Link>
           <Divider />
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <Settings fontSize="small" />
-            </ListItemIcon>
-            Settings
-          </MenuItem>
+          <Link to={"/setting"}>
+            <MenuItem onClick={handleClose}>
+              <ListItemIcon>
+                <Settings fontSize="small" />
+              </ListItemIcon>
+              Settings
+            </MenuItem>
+          </Link>
           <MenuItem onClick={handleClose}>
             <ListItemIcon>
               <Logout fontSize="small" />

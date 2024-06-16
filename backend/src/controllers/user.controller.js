@@ -238,7 +238,7 @@ const getCorrentUser = async (req, res) => {
 };
 
 const updateUserDetails = async (req, res) => {
-  const { username, email } = req.body;
+  const { username, email, role } = req.body;
 
   try {
     const user = await User.findById(req.user?._id);
@@ -271,6 +271,10 @@ const updateUserDetails = async (req, res) => {
 
     if (email && email !== user.email) {
       updatedFields.email = email;
+    }
+
+    if (role && role !== user.role) {
+      updatedFields.role = role;
     }
 
     const updateUser = await User.findByIdAndUpdate(

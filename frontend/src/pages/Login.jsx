@@ -29,9 +29,9 @@ const Login = () => {
       console.log("login error ", error);
     }
   };
-
+  
   return (
-    <div className="h-screen w-full text-zinc-800 flex flex-col justify-center items-center">
+      <div className="h-screen w-full text-zinc-800 flex flex-col justify-center items-center">
       <form
         onSubmit={submitHandler}
         className="border-[1px] md:w-1/2 border-zinc-400 md:p-10 rounded-lg p-5"
