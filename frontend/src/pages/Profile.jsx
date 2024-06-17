@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import ProfileLayout from "../components/ProfileLayout";
+import { useSelector } from "react-redux";
 
 const Profile = () => {
+  const user = useSelector((state) => state.user.user);
   return (
     <div className="min-h-[87vh] w-[100%] font-semibold my-5 md:flex md:px-8 px-2 overflow-hidden">
       <div className="md:w-1/6  md:border-r-[1px] border-zinc-300 p-2">
@@ -16,20 +18,24 @@ const Profile = () => {
             </p>
           </Link>
         </div>
-        <div className="my-5">
-          <Link to={"uploadProduct"}>
-            <p className="border-[1px] p-2 my-3 border-zinc-300 hover:bg-zinc-100">
-              Upload Product
-            </p>
-          </Link>
-        </div>
-        <div className="my-5">
-          <Link to={"getAllProduct"}>
-            <p className="border-[1px] p-2 my-3 border-zinc-300 hover:bg-zinc-100">
-              Get All Product
-            </p>
-          </Link>
-        </div>
+        {(user?.role === "saler" || user?.role === "admin") && (
+          <div>
+            <div className="my-5">
+              <Link to={"uploadProduct"}>
+                <p className="border-[1px] p-2 my-3 border-zinc-300 hover:bg-zinc-100">
+                  Upload Product
+                </p>
+              </Link>
+            </div>
+            <div className="my-5">
+              <Link to={"getAllProduct"}>
+                <p className="border-[1px] p-2 my-3 border-zinc-300 hover:bg-zinc-100">
+                  Get All Product
+                </p>
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
       <div className="h-full w-full">
         <ProfileLayout />

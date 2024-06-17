@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useRef, useState } from "react";
 import { BsCloudUpload } from "react-icons/bs";
 
@@ -6,7 +7,7 @@ const UploadProduct = () => {
     title: "",
     description: "",
     price: 0,
-    fakePrice:0,
+    fakePrice: 0,
     category: "",
   });
   const [message, setMessage] = useState("");
@@ -15,10 +16,33 @@ const UploadProduct = () => {
 
   const imageRef = useRef();
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    // Add your form submission logic here
-    setMessage("Product uploaded successfully!");
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+    formData.append("price", data.price);
+    formData.append("fakePrice", data.fakePrice);
+    formData.append("category", data.category);
+    formData.append("productImage", image);
+
+    try {
+      const res = await axios.post("/api/v1/product/upload", formData);
+      if (res.data) {
+        setMessage("Product uploaded successfully!");
+        setData({
+          title: "",
+          description: "",
+          price: 0,
+          fakePrice: 0,
+          category: "",
+        });
+        setImagePreview(null);
+      }
+    } catch (error) {
+      console.log(error);
+      setMessage("Failed to upload product");
+    }
   };
 
   const handleChange = (e) => {
@@ -42,10 +66,10 @@ const UploadProduct = () => {
   };
 
   return (
-    <div className="h-full w-full text-zinc-800 flex flex-col justify-center items-center">
+    <div className="h-full w-full text-zinc-800 flex flex-col justify-center items-center overflow-hidden">
       <form
         onSubmit={submitHandler}
-        className="border-[1px] md:w-1/2 border-zinc-400 md:p-10 rounded-lg p-5"
+        className="overflow-hidden border-[1px] md:w-1/2 border-zinc-400 md:p-10 rounded-lg p-5"
       >
         <h2 className="text-center mb-3 text-2xl text-zinc-400 font-semibold">
           Upload Product
@@ -134,7 +158,7 @@ const UploadProduct = () => {
           type="submit"
           className="py-2 w-full px-3 rounded-lg text-md text-white font-semibold mt-5 bg-blue-500"
         >
-          Upload Product 
+          Upload Product
         </button>
         <p className="my-2 text-center">{message}</p>
       </form>

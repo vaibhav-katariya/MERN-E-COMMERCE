@@ -34,7 +34,6 @@ const Header = () => {
   const logoutHandler = async () => {
     try {
       const res = await axios.post("/api/v1/user/logout");
-      console.log(res);
       dispatch(logout());
       navigate("/login");
     } catch (error) {
@@ -43,7 +42,7 @@ const Header = () => {
   };
 
   return (
-    <div className="h-14 shadow-lg border-b-2 flex items-center justify-between md:px-8 px-2">
+    <div className="overflow-hidden h-14 shadow-lg border-b-2 flex items-center justify-between md:px-8 px-2">
       <h1 className="md:text-xl text-md font-semibold">MY STORE</h1>
       <div className="h-[1.5rem] flex items-center">
         <input

@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "../store/userSlice";
 const UpdateUser = () => {
   const user = useSelector((state) => state.user.user);
-  console.log(user);
   const dispatch = useDispatch();
   const imageRef = useRef();
   const [data, setData] = useState({
