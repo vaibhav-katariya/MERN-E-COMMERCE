@@ -44,7 +44,7 @@ const registerUser = async (req, res) => {
       });
     }
 
-    const avatarPath = req.files?.avatar?.[0]?.path;
+    const avatarPath = req.files?.avatar[0]?.path;
 
     if (!avatarPath) {
       return res.status(400).json({

@@ -6,6 +6,7 @@ const UploadProduct = () => {
     title: "",
     description: "",
     price: 0,
+    fakePrice:0,
     category: "",
   });
   const [message, setMessage] = useState("");
@@ -69,6 +70,28 @@ const UploadProduct = () => {
             rows={4}
             value={data.description}
             onChange={handleChange}
+          />
+        </div>
+        <div>
+          <input
+            value={data.fakePrice}
+            onChange={handleChange}
+            className="border-[1px] border-zinc-300 w-full px-3 py-2 placeholder:text-lg my-3 rounded-lg outline-none"
+            type="number"
+            name="fakePrice"
+            placeholder="Old Price"
+            inputMode="numeric"
+          />
+        </div>
+        <div>
+          <input
+            value={data.price}
+            onChange={handleChange}
+            className="border-[1px] border-zinc-300 w-full px-3 py-2 placeholder:text-lg my-3 rounded-lg outline-none"
+            type="number"
+            name="price"
+            placeholder="New Price"
+            inputMode="numeric"
           />
         </div>
         <div>
