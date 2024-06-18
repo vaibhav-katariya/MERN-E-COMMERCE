@@ -1,6 +1,9 @@
 import { Product } from "../model/product.model.js";
 import { User } from "../model/user.model.js";
-import { fileUploadOnCloudinary } from "../utils/fileUploader.js";
+import {
+  fileDeleteOnCloudinary,
+  fileUploadOnCloudinary,
+} from "../utils/fileUploader.js";
 
 const uploadProduct = async (req, res) => {
   const { title, description, fakePrice, price, category, rating } = req.body;
@@ -139,5 +142,118 @@ const getAllProduct = async (req, res) => {
     });
   }
 };
+const updateProduct = async (req, res) => {
+  const { id } = req.params;
+  const { title, description, fakePrice, price, category } = req.body;
 
-export { uploadProduct, getOwnerProducts, getProductById, getAllProduct };
+  try {
+    const product = await Product.findById(id);
+
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
+    if (product.owner._id.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        message: "You are not authorized to update this product",
+      });
+    }
+
+    const updateData = {
+      title,
+      description,
+      category,
+      fakePrice,
+      price,
+    };
+
+    if (req.files && req.files.productImage) {
+      const productImage = req.files.productImage[0].path;
+
+      const imagePathPublicId = product.productImage
+        .split("/")
+        .pop()
+        .split(".")[0];
+
+      await fileDeleteOnCloudinary(imagePathPublicId);
+
+      const productImagePath = await fileUploadOnCloudinary(productImage);
+
+      if (!productImagePath || !productImagePath.url) {
+        return res.status(500).json({
+          message: "Failed to upload product image",
+        });
+      }
+
+      updateData.productImage = productImagePath.url;
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(id, updateData, {
+      new: true,
+    });
+
+    if (!updatedProduct) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
+    res.status(200).json({
+      message: "Product updated successfully",
+      product: updatedProduct,
+    });
+  } catch (error) {
+    console.log("Error while updating product", error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+};
+
+const deleteProduct = async (req, res) => {
+  const { id } = req.params;
+
+  const product = await Product.findById(id);
+
+  if (!product) {
+    return res.status(404).json({
+      message: "Product not found",
+    });
+  }
+
+  if (product.owner._id.toString() !== req.user._id.toString()) {
+    return res.status(403).json({
+      message: "You are not authorized to delete this product",
+    });
+  }
+
+  try {
+    const imagePathPublicId = product.productImage
+      .split("/")
+      .pop()
+      .split(".")[0];
+    await fileDeleteOnCloudinary(imagePathPublicId);
+
+    await Product.findByIdAndDelete(id);
+
+    res.status(200).json({
+      message: "Product deleted successfully",
+    });
+  } catch (error) {
+    console.log("Error while updating product", error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+};
+
+export {
+  uploadProduct,
+  getOwnerProducts,
+  getProductById,
+  getAllProduct,
+  updateProduct,
+  deleteProduct,
+};
