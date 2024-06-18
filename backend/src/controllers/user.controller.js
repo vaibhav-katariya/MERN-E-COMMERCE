@@ -186,6 +186,12 @@ const changePassword = async (req, res) => {
 
     const user = await User.findById(req.user?._id);
 
+    if (user?._id.toString() !== req.user?._id.toString()) {
+      return res.status(401).json({
+        message: "Unauthorized to change password",
+      });
+    }
+
     if (!user) {
       return res.status(400).json({
         message: "User not found",
@@ -244,6 +250,12 @@ const updateUserDetails = async (req, res) => {
     const user = await User.findById(req.user?._id);
     if (!user) {
       throw new Error("User not found");
+    }
+
+    if (user?._id.toString() !== req.user?._id.toString()) {
+      return res.status(401).json({
+        message: "Unauthorized to change user details",
+      });
     }
 
     let updatedFields = {};
