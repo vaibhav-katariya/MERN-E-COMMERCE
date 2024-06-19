@@ -21,6 +21,7 @@ import UpdateUser from "./components/UpdateUser.jsx";
 import UserProfile from "./components/UserProfile.jsx";
 import UploadProduct from "./components/UploadProduct.jsx";
 import GetAllProduct from "./components/GetAllProduct.jsx";
+import ProductDetails from "./components/ProductDetails.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -38,6 +39,7 @@ const router = createBrowserRouter(
         <Route path="changePassword" element={<UpdatePassword />} />
         <Route path="changeUserDetails" element={<UpdateUser />} />
       </Route>
+      <Route path="productDetails/:id" element={<ProductDetails />} />
     </Route>
   )
 );
