@@ -192,12 +192,8 @@ const updateProduct = async (req, res) => {
       const imagePathPublicId = image.split("/").pop().split(".")[0];
       return imagePathPublicId;
     });
-
-    console.log("publicIds to be deleted:", publicIds);
-
     await fileDeleteOnCloudinary(publicIds);
 
-    
     const productImages = await Promise.all(
       req.files.productImages.map(async (file) => {
         const productImagePath = file.path;
@@ -235,9 +231,9 @@ const updateProduct = async (req, res) => {
     });
   }
 };
+
 const deleteProduct = async (req, res) => {
   const { id } = req.params;
-
   try {
     const product = await Product.findById(id);
 
@@ -246,7 +242,6 @@ const deleteProduct = async (req, res) => {
         message: "Product not found",
       });
     }
-
     if (product.owner._id.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         message: "You are not authorized to delete this product",
@@ -257,8 +252,6 @@ const deleteProduct = async (req, res) => {
       const imagePathPublicId = image.split("/").pop().split(".")[0];
       return imagePathPublicId;
     });
-
-    console.log("publicIds to be deleted:", publicIds); // Log publicIds for debugging
 
     await fileDeleteOnCloudinary(publicIds);
 

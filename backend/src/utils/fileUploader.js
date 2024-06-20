@@ -13,11 +13,10 @@ cloudinary.config({
 const fileUploadOnCloudinary = async (filePath) => {
   try {
     const result = await cloudinary.uploader.upload(filePath, {
-      folder: "e-comm",
       resource_type: "image",
     });
     fs.unlinkSync(filePath);
-    return { url: result.url };
+    return result;
   } catch (error) {
     console.log("Error uploading to Cloudinary", error);
     fs.unlinkSync(filePath);
@@ -30,11 +29,9 @@ const fileDeleteOnCloudinary = async (public_ids) => {
 
   try {
     const response = await cloudinary.api.delete_resources(public_ids, {
-      folder: "e-comm",
       resource_type: "image",
     });
 
-    console.log(response);
     return response;
   } catch (error) {
     console.error("Error deleting file:", error);
