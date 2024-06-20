@@ -11,8 +11,8 @@ const UploadProduct = () => {
     category: "",
   });
   const [message, setMessage] = useState("");
-  const [image, setImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [images, setImages] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
 
   const imageRef = useRef();
 
@@ -24,7 +24,10 @@ const UploadProduct = () => {
     formData.append("price", data.price);
     formData.append("fakePrice", data.fakePrice);
     formData.append("category", data.category);
-    formData.append("productImage", image);
+    
+    images.forEach((image, index) => {
+      formData.append(`productImages`, image);
+    });
 
     try {
       const res = await axios.post("/api/v1/product/upload", formData);
@@ -37,7 +40,8 @@ const UploadProduct = () => {
           fakePrice: 0,
           category: "",
         });
-        setImagePreview(null);
+        setImages([]);
+        setImagePreviews([]);
       }
     } catch (error) {
       console.log(error);
@@ -54,16 +58,15 @@ const UploadProduct = () => {
   };
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
+    const files = Array.from(e.target.files);
+    setImages(files);
+    const filePreviews = files.map((file) => URL.createObjectURL(file));
+    setImagePreviews(filePreviews);
   };
+
+
+  console.log(data);
+  console.log(images);
 
   return (
     <div className="h-full w-full text-zinc-800 flex flex-col justify-center items-center overflow-hidden">
@@ -134,24 +137,30 @@ const UploadProduct = () => {
             hidden
             ref={imageRef}
             type="file"
-            name="ProductImage"
-            id="image"
+            name="ProductImages"
+            id="images"
+            multiple
             onChange={handleFileChange}
           />
           <div
             className="cursor-pointer text-zinc-400 border-[1px] my-2 border-zinc-300 p-2 flex items-center gap-2 rounded-lg"
             onClick={() => imageRef.current.click()}
           >
-            <BsCloudUpload /> Upload Product Image
+            <BsCloudUpload /> Upload Product Images
           </div>
         </div>
         <div>
-          {imagePreview && (
-            <img
-              className="h-32 md:h-72 w-full object-cover rounded-lg"
-              src={imagePreview}
-              alt="Product Preview"
-            />
+          {imagePreviews.length > 0 && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {imagePreviews.map((preview, index) => (
+                <img
+                  key={index}
+                  className="h-32 md:h-48 w-full object-cover rounded-lg"
+                  src={preview}
+                  alt={`Product Preview ${index + 1}`}
+                />
+              ))}
+            </div>
           )}
         </div>
         <button

@@ -43,7 +43,9 @@ const Header = () => {
 
   return (
     <div className="overflow-hidden h-14 shadow-lg border-b-2 flex items-center justify-between md:px-8 px-2">
-      <h1 className="md:text-xl text-md font-semibold">MY STORE</h1>
+      <Link to={"/"}>
+        <h1 className="md:text-xl text-md font-semibold">MY STORE</h1>
+      </Link>
       <div className="h-[1.5rem] flex items-center">
         <input
           type="text"

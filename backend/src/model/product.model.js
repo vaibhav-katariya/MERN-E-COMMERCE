@@ -18,8 +18,8 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    productImage: {
-      type: String,
+    productImages: {
+      type: [String],
       required: true,
     },
     category: {
