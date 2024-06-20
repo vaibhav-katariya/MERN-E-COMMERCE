@@ -24,31 +24,21 @@ const fileUploadOnCloudinary = async (filePath) => {
     return null;
   }
 };
-const fileDeleteOnCloudinary = async (publicIds) => {
-  console.log("Received publicIds:", publicIds);
+
+const fileDeleteOnCloudinary = async (public_ids) => {
+  if (!public_ids) return null;
+
   try {
-    // Ensure publicIds is an array
-    if (typeof publicIds === "string") {
-      publicIds = [publicIds];
-    } else if (!Array.isArray(publicIds)) {
-      throw new Error("Invalid publicIds argument. Must be a string or an array of strings.");
-    }
-
-    // Log the publicIds to be deleted
-    console.log("publicIds to be deleted:", publicIds);
-
-    // Perform the deletion
-    const result = await cloudinary.api.delete_resources(publicIds, {
+    const response = await cloudinary.api.delete_resources(public_ids, {
+      folder: "e-comm",
       resource_type: "image",
     });
 
-    // Log the result from Cloudinary
-    console.log("Deleted images from Cloudinary:", result);
-    return result;
+    console.log(response);
+    return response;
   } catch (error) {
-    // Log the error details
-    console.error("Error deleting images from Cloudinary:", error);
-    throw error;
+    console.error("Error deleting file:", error);
+    return { success: false, error: error.message };
   }
 };
 export { fileUploadOnCloudinary, fileDeleteOnCloudinary };
