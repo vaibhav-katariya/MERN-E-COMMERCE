@@ -42,7 +42,7 @@ const GetAllProduct = () => {
                   <img
                     style={{ width: "100%", height: 132, objectFit: "cover" }}
                     alt={item.title}
-                    src={item.productImage}
+                    src={item.productImages[0]}
                   />
                 </Link>
               ) : (
@@ -52,11 +52,19 @@ const GetAllProduct = () => {
               {item ? (
                 <div>
                   <Box sx={{ pr: 2 }}>
-                    <Typography gutterBottom variant="body1">
+                    <Typography
+                      className="truncate"
+                      gutterBottom
+                      variant="body1"
+                    >
                       {item.title}
                     </Typography>
-                    <Typography gutterBottom variant="body2">
-                      <p className="truncate"> {item.description}</p>
+                    <Typography
+                      className="truncate"
+                      gutterBottom
+                      variant="body2"
+                    >
+                      {item.description}
                     </Typography>
                     <Typography
                       display="block"

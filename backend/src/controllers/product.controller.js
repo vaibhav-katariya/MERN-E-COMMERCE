@@ -24,7 +24,6 @@ const uploadProduct = async (req, res) => {
       });
     }
 
-    // Upload images to Cloudinary
     const productImages = await Promise.all(
       req.files.productImages.map(async (file) => {
         const productImagePath = file.path;
@@ -179,31 +178,41 @@ const updateProduct = async (req, res) => {
       price,
     };
 
-    if (req.files && req.files.productImages) {
-      // Delete existing product images on cloudinary
-      for (let image of product.productImages) {
-        const imagePathPublicId = image.split("/").pop().split(".")[0];
-        await fileDeleteOnCloudinary(imagePathPublicId);
-      }
+    if (
+      !req.files ||
+      !req.files.productImages ||
+      req.files.productImages.length === 0
+    ) {
+      return res.status(400).json({
+        message: "No images were uploaded",
+      });
+    }
 
-      // Upload new product images
-      const productImages = [];
-      for (let file of req.files.productImages) {
+    const publicIds = product.productImages.map((image) => {
+      const imagePathPublicId = image.split("/").pop().split(".")[0];
+      return imagePathPublicId;
+    });
+
+    console.log("publicIds to be deleted:", publicIds);
+
+    await fileDeleteOnCloudinary(publicIds);
+
+    
+    const productImages = await Promise.all(
+      req.files.productImages.map(async (file) => {
         const productImagePath = file.path;
+
         const productImage = await fileUploadOnCloudinary(productImagePath);
 
         if (!productImage || !productImage.url) {
-          // Handle upload failure
-          return res.status(500).json({
-            message: "Failed to upload product images",
-          });
+          throw new Error("One or more images could not be uploaded");
         }
 
-        productImages.push(productImage.url);
-      }
+        return productImage.url;
+      })
+    );
 
-      updateData.productImages = productImages; // Update array of image URLs
-    }
+    updateData.productImages = productImages;
 
     const updatedProduct = await Product.findByIdAndUpdate(id, updateData, {
       new: true,
@@ -226,44 +235,45 @@ const updateProduct = async (req, res) => {
     });
   }
 };
+const deleteProduct = async (req, res) => {
+  const { id } = req.params;
 
-// const deleteProduct = async (req, res) => {
-//   const { id } = req.params;
+  try {
+    const product = await Product.findById(id);
 
-//   try {
-//     const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
 
-//     if (!product) {
-//       return res.status(404).json({
-//         message: "Product not found",
-//       });
-//     }
+    if (product.owner._id.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        message: "You are not authorized to delete this product",
+      });
+    }
 
-//     if (product.owner._id.toString() !== req.user._id.toString()) {
-//       return res.status(403).json({
-//         message: "You are not authorized to delete this product",
-//       });
-//     }
+    const publicIds = product.productImages.map((image) => {
+      const imagePathPublicId = image.split("/").pop().split(".")[0];
+      return imagePathPublicId;
+    });
 
-//     const publicIds = product.productImages.map((image) => {
-//       const imagePathPublicId = image.split("/").pop().split(".")[0];
-//       return imagePathPublicId;
-//     });
+    console.log("publicIds to be deleted:", publicIds); // Log publicIds for debugging
 
-//     await fileDeleteOnCloudinary(publicIds);
+    await fileDeleteOnCloudinary(publicIds);
 
-//     await Product.findByIdAndDelete(id);
+    await Product.findByIdAndDelete(id);
 
-//     res.status(200).json({
-//       message: "Product deleted successfully",
-//     });
-//   } catch (error) {
-//     console.error("Error while deleting product", error);
-//     return res.status(500).json({
-//       message: "Internal Server Error",
-//     });
-//   }
-// };
+    res.status(200).json({
+      message: "Product deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error while deleting product:", error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+};
 
 export {
   uploadProduct,

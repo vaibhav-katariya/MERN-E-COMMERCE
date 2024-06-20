@@ -26,7 +26,7 @@ router
   .route("/updateProduct/:id")
   .put(
     verifyJWT,
-    upload.fields([{ name: "productImage", maxCount: 1 }]),
+    upload.fields([{ name: "productImages", maxCount: 4 }]),
     updateProduct
   );
 

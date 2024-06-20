@@ -24,37 +24,31 @@ const fileUploadOnCloudinary = async (filePath) => {
     return null;
   }
 };
-// const fileDeleteOnCloudinary = async (publicIds) => {
-//   console.log(publicIds);
-//   try {
-//     if (typeof publicIds === "string") {
-//       const result = await cloudinary.api.delete_resources(publicIds, {
-//         folder: "e-comm",
-//         resource_type: "image",
-//       });
-//       console.log("Deleted image from Cloudinary:", result);
-//       return result;
-//     } else if (Array.isArray(publicIds)) {
-//       const results = await Promise.all(
-//         publicIds.map(
-//           async (id) =>
-//             await cloudinary.api.delete_resources(id, {
-//               folder: "e-comm",
-//               resource_type: "image",
-//             })
-//         )
-//       );
-//       console.log("Deleted images from Cloudinary:", results);
-//       return results;
-//     } else {
-//       throw new Error(
-//         "Invalid publicIds argument. Must be a string or an array of strings."
-//       );
-//     }
-//   } catch (error) {
-//     console.log("Error deleting images from Cloudinary:", error);
-//     throw error;
-//   }
-// };
+const fileDeleteOnCloudinary = async (publicIds) => {
+  console.log("Received publicIds:", publicIds);
+  try {
+    // Ensure publicIds is an array
+    if (typeof publicIds === "string") {
+      publicIds = [publicIds];
+    } else if (!Array.isArray(publicIds)) {
+      throw new Error("Invalid publicIds argument. Must be a string or an array of strings.");
+    }
 
+    // Log the publicIds to be deleted
+    console.log("publicIds to be deleted:", publicIds);
+
+    // Perform the deletion
+    const result = await cloudinary.api.delete_resources(publicIds, {
+      resource_type: "image",
+    });
+
+    // Log the result from Cloudinary
+    console.log("Deleted images from Cloudinary:", result);
+    return result;
+  } catch (error) {
+    // Log the error details
+    console.error("Error deleting images from Cloudinary:", error);
+    throw error;
+  }
+};
 export { fileUploadOnCloudinary, fileDeleteOnCloudinary };
