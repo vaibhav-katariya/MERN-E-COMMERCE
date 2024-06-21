@@ -25,8 +25,8 @@ const UploadProduct = () => {
     formData.append("fakePrice", data.fakePrice);
     formData.append("category", data.category);
     
-    images.forEach((image, index) => {
-      formData.append(`productImages`, image);
+    images.forEach((image) => {
+      formData.append("productImages", image);
     });
 
     try {
@@ -63,10 +63,6 @@ const UploadProduct = () => {
     const filePreviews = files.map((file) => URL.createObjectURL(file));
     setImagePreviews(filePreviews);
   };
-
-
-  console.log(data);
-  console.log(images);
 
   return (
     <div className="h-full w-full text-zinc-800 flex flex-col justify-center items-center overflow-hidden">

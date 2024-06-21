@@ -14,7 +14,7 @@ const fileUploadOnCloudinary = async (filePath) => {
   try {
     const result = await cloudinary.uploader.upload(filePath, {
       folder:"e-comm",
-      resource_type: "image",
+      resource_type: "auto",
     });
     fs.unlinkSync(filePath);
     return result;

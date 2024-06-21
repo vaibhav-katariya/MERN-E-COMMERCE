@@ -10,8 +10,6 @@ const Signup = () => {
     role: "user",
   });
 
-  console.log(data);
-
   const navigate = useNavigate();
   const [image, setImage] = useState(null);
 
