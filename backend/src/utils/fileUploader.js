@@ -13,6 +13,7 @@ cloudinary.config({
 const fileUploadOnCloudinary = async (filePath) => {
   try {
     const result = await cloudinary.uploader.upload(filePath, {
+      folder:"e-comm",
       resource_type: "image",
     });
     fs.unlinkSync(filePath);
@@ -27,8 +28,11 @@ const fileUploadOnCloudinary = async (filePath) => {
 const fileDeleteOnCloudinary = async (public_ids) => {
   if (!public_ids) return null;
 
+  const newPublicIds = public_ids.map((public_id)=> "e-comm/"+public_id)
+
   try {
-    const response = await cloudinary.api.delete_resources(public_ids, {
+    const response = await cloudinary.api.delete_resources(newPublicIds, {
+      folder:"e-comm",
       resource_type: "image",
     });
 
