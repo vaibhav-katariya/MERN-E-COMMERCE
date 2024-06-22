@@ -6,6 +6,7 @@ import {
   getAllProduct,
   getOwnerProducts,
   getProductById,
+  getProductsByCategory,
   updateProduct,
   uploadProduct,
 } from "../controllers/product.controller.js";
@@ -20,6 +21,7 @@ router
     uploadProduct
   );
 router.route("/getOwnerProduct/:username").get(getOwnerProducts);
+router.route("/getProductsByCategory/:category").get(getProductsByCategory);
 router.route("/getProductById/:id").get(getProductById);
 router.route("/getAllProduct").get(getAllProduct);
 router

@@ -104,6 +104,39 @@ const getOwnerProducts = async (req, res) => {
   }
 };
 
+const getProductsByCategory = async (req, res) => {
+  try {
+    const { category } = req.params;
+
+    if (!category) {
+      return res.status(400).json({
+        message: "Category is required",
+      });
+    }
+
+    const data = await Product.find({ category }).populate({
+      path: "owner",
+      select: "-password -refreshToken",
+    });
+
+    if (!data) {
+      return res.status(404).json({
+        message: "No products found",
+      });
+    }
+
+    res.status(200).json({
+      message: "products fetched successfully",
+      data,
+    });
+  } catch (error) {
+    console.log("error while get product", error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+};
+
 const getProductById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -275,4 +308,5 @@ export {
   getAllProduct,
   updateProduct,
   deleteProduct,
+  getProductsByCategory,
 };
