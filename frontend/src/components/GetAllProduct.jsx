@@ -33,9 +33,9 @@ const GetAllProduct = () => {
 
   return (
     <div className="w-full flex flex-wrap px-5 cursor-pointer">
-      {data?.length > 0 ? (
+      
         <Grid container spacing={2}>
-          {(loading ? Array.from(new Array(8)) : data).map((item, index) => (
+          {(loading ? Array.from(new Array(12)) : data).map((item, index) => (
             <Grid item xs={6} sm={4} md={3} key={index}>
               <Box sx={{ width: "100%", marginRight: 0.5, my: 2 }}>
                 {item ? (
@@ -74,12 +74,12 @@ const GetAllProduct = () => {
                       >
                         {item.owner?.username}
                       </Typography>
-                      <Typography variant="caption" color="text.secondary">
+                      {/* <Typography variant="caption" color="text.secondary">
                         •{" "}
                         {formatDistanceToNow(new Date(item.createdAt), {
                           addSuffix: true,
                         })}
-                      </Typography>
+                      </Typography> */}
                     </Box>
                   </div>
                 ) : (
@@ -92,11 +92,7 @@ const GetAllProduct = () => {
             </Grid>
           ))}
         </Grid>
-      ) : (
-        <div className="text-center w-full my-5 text-xl">
-          "Create your own product"
-        </div>
-      )}
+      
     </div>
   );
 };

@@ -52,6 +52,7 @@ const ProductDetails = () => {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     findProduct();
   }, [id]);
 
@@ -86,10 +87,10 @@ const ProductDetails = () => {
 
   return (
     <div className="">
-      <div className="container mx-auto p-4 px-2 my-5">
+      <div className="container p-4 px-3 md:flex justify-start md:px-8 my-5">
         <div className="min-h-[200px] flex flex-col md:flex-row gap-8">
           {/***product Image */}
-          <div className="h-96 flex flex-col lg:flex-row-reverse gap-4">
+          <div className="min-h-96 flex flex-col lg:flex-row-reverse mx-auto gap-4">
             <div className="h-[300px] w-[300px] lg:h-96 lg:w-96 bg-slate-200 relative p-2">
               <img
                 src={activeImage}
@@ -127,14 +128,14 @@ const ProductDetails = () => {
                 </div>
               ) : (
                 <div className="flex gap-2 lg:flex-col overflow-scroll scrollbar-none h-full">
-                  {data?.productImages?.map((imgURL, index) => (
+                  {data?.productImages?.map((imgURL) => (
                     <div
-                      className="h-20 w-20 bg-slate-200 rounded p-1"
+                      className="h-14 md:h-20 w-14 md:w-20 bg-slate-200 rounded p-1"
                       key={imgURL}
                     >
                       <img
                         src={imgURL}
-                        className="w-full h-full object-scale-down mix-blend-multiply cursor-pointer"
+                        className="w-full h-full mx-auto object-scale-down mix-blend-multiply cursor-pointer"
                         onMouseEnter={() => handleMouseEnterProduct(imgURL)}
                         onClick={() => handleMouseEnterProduct(imgURL)}
                       />
@@ -171,7 +172,7 @@ const ProductDetails = () => {
             </div>
           ) : (
             <div className="flex flex-col justify-center gap-1">
-              <p className="bg-red-200 text-red-600 px-2 rounded-full inline-block w-fit">
+              <p className="bg-red-200 text-red-600 px-3 py-1 font-semibold rounded-lg inline-block w-fit">
                 {data?.title}
               </p>
               <h2 className="text-2xl lg:text-4xl font-medium">
@@ -181,29 +182,22 @@ const ProductDetails = () => {
               <p className="capitalize text-slate-400">
                 {data?.owner?.username}
               </p>
-
-              <div className="text-red-600 flex items-center gap-1">
-                <FaStar />
-                <FaStar />
-                <FaStar />
-                <FaStar />
-                <FaStarHalf />
-              </div>
-
               <div className="flex items-center gap-2 text-2xl lg:text-3xl font-medium my-1">
-                <p className="text-red-600">{data?.price}</p>
-                <p className="text-slate-400 line-through">{data?.fakePrice}</p>
+                <p className="text-red-500">{data?.price}</p>
+                <p className="text-slate-400 line-through text-xl">
+                  {data?.fakePrice}
+                </p>
               </div>
 
               <div className="flex items-center gap-3 my-2">
                 <button
-                  className="border-2 border-red-600 rounded px-3 py-1 min-w-[120px] text-red-600 font-medium hover:bg-red-600 hover:text-white"
+                  className="border-2 border-red-500 rounded px-3 py-1 min-w-[120px] text-red-600 font-medium hover:bg-red-500 hover:text-white"
                   onClick={(e) => handleBuyProduct(e, data?._id)}
                 >
                   Buy
                 </button>
                 <button
-                  className="border-2 border-red-600 rounded px-3 py-1 min-w-[120px] font-medium text-white bg-red-600 hover:text-red-600 hover:bg-white"
+                  className="border-2 border-red-500 rounded px-3 py-1 min-w-[120px] font-medium text-white bg-red-500 hover:text-red-600 hover:bg-white"
                   onClick={(e) => handleAddToCart(e, data?._id)}
                 >
                   Add To Cart
@@ -221,69 +215,73 @@ const ProductDetails = () => {
         </div>
       </div>
 
-      <div className="w-full flex flex-wrap px-5 cursor-pointer my-8">
-        <h1 className="my-8 text-2xl font-semibold w-full text-center">Recommended Product</h1>
+      <div className="w-full flex flex-wrap px-3 md:px-8 cursor-pointer my-8">
+        <h1 className="my-8 text-2xl font-semibold w-full text-center md:text-start">
+          Recommended Product
+        </h1>
         <Grid container spacing={2}>
-          {(loading ? Array.from(new Array(8)) : categoryData).map((item, index) => (
-            <Grid item xs={6} sm={4} md={3} key={index} >
-              <Box sx={{ width: "100%", marginRight: 0.5, my: 2 }}>
-                {item ? (
-                  <Link to={`/productDetails/${item?._id}`}>
-                    <img
-                      style={{
-                        width: "100%",
-                        height: 132,
-                        objectFit: "contain",
-                      }}
-                      alt={item.title}
-                      src={item.productImages[0]}
-                    />
-                  </Link>
-                ) : (
-                  <Skeleton variant="rectangular" width="100%" height={132} />
-                )}
+          {(loading ? Array.from(new Array(8)) : categoryData).map(
+            (item, index) => (
+              <Grid item xs={6} sm={4} md={3} key={index}>
+                <Box sx={{ width: "100%", marginRight: 0.5, my: 2 }}>
+                  {item ? (
+                    <Link to={`/productDetails/${item?._id}`}>
+                      <img
+                        style={{
+                          width: "100%",
+                          height: 132,
+                          objectFit: "contain",
+                        }}
+                        alt={item.title}
+                        src={item.productImages[0]}
+                      />
+                    </Link>
+                  ) : (
+                    <Skeleton variant="rectangular" width="100%" height={132} />
+                  )}
 
-                {item ? (
-                  <div>
-                    <Box sx={{ pr: 2 }}>
-                      <Typography
-                        className="truncate"
-                        gutterBottom
-                        variant="body1"
-                      >
-                        {item.title}
-                      </Typography>
-                      <Typography
-                        className="truncate"
-                        gutterBottom
-                        variant="body2"
-                      >
-                        {item.description}
-                      </Typography>
-                      <Typography
-                        display="block"
-                        variant="caption"
-                        color="text.secondary"
-                      >
-                        {item.owner?.username}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        •{" "}
-                        {formatDistanceToNow(new Date(item.createdAt), {
-                          addSuffix: true,
-                        })}
-                      </Typography>
+                  {item ? (
+                    <div>
+                      <Box sx={{ pr: 2 }}>
+                        <Typography
+                          className="truncate"
+                          gutterBottom
+                          variant="body1"
+                        >
+                          {item.title}
+                        </Typography>
+                        <Typography
+                          className="truncate"
+                          gutterBottom
+                          variant="body2"
+                        >
+                          {item.description}
+                        </Typography>
+                        <Typography
+                          display="block"
+                          variant="caption"
+                          color="text.secondary"
+                        >
+                          {item.owner?.username}
+                        </Typography>
+                        {/* <Typography variant="caption" color="text.secondary">
+                          •{" "}
+                          {formatDistanceToNow(new Date(item.createdAt), {
+                            addSuffix: true,
+                          })}
+                        </Typography> */}
+                      </Box>
+                    </div>
+                  ) : (
+                    <Box sx={{ pt: 0.5 }}>
+                      <Skeleton />
+                      <Skeleton width="60%" />
                     </Box>
-                  </div>
-                ) : (
-                  <Box sx={{ pt: 0.5 }}>
-                    <Skeleton />
-                    <Skeleton width="60%" />
-                  </Box>
-                )}
-              </Box>
-            </Grid>
-          ))}
+                  )}
+                </Box>
+              </Grid>
+            )
+          )}
         </Grid>
       </div>
     </div>

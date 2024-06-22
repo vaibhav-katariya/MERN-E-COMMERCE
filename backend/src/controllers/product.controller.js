@@ -104,6 +104,33 @@ const getOwnerProducts = async (req, res) => {
   }
 };
 
+const getProductCategoryProduct = async (req, res) => {
+  try {
+    const productCategory = await Product.distinct("category");
+    
+    const categoryProduct = []
+
+    for (const category of productCategory) {
+      const product = await Product.findOne({category})
+
+      if (product) {
+        categoryProduct.push(product)
+      }
+    }
+
+    res.status(200).json({
+      message: "Category products fetched successfully",
+      categoryProduct,
+    })
+
+  } catch (error) {
+    console.log("error while get product", error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+};
+
 const getProductsByCategory = async (req, res) => {
   try {
     const { category } = req.params;
@@ -309,4 +336,5 @@ export {
   updateProduct,
   deleteProduct,
   getProductsByCategory,
+  getProductCategoryProduct,
 };
