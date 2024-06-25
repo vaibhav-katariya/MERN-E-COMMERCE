@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
+import {useDispatch} from "react-redux"
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -7,10 +8,17 @@ const VerticalCardProduct = ({ category, heading }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const loadingList = new Array(13).fill(null);
-
+  const dispatch = useDispatch()
   const scrollElement = useRef();
 
-  const handleAddToCart = async (e, id) => {};
+  const handleAddToCart = async (e, product) => {
+    e.preventDefault();
+    try {
+      console.log(product);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
 
   const fetchData = async () => {
     const categoryProduct = await axios.get(
@@ -106,7 +114,7 @@ const VerticalCardProduct = ({ category, heading }) => {
                     className="font-semibold text-md bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg transition-all"
                     onClick={(e) => {
                       e.preventDefault();
-                      handleAddToCart(e, product?._id);
+                      handleAddToCart(e, product);
                     }}
                   >
                     Add to Cart

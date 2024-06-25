@@ -11,7 +11,14 @@ const HorizontalCardProduct = ({ category, heading }) => {
   const [scroll, setScroll] = useState(0);
   const scrollElement = useRef();
 
-  const handleAddToCart = async (e, id) => {};
+  const handleAddToCart = async (e, product) => {
+    e.preventDefault();
+    try {
+      console.log(product);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   const fetchData = async () => {
     const categoryProduct = await axios.get(
@@ -111,7 +118,7 @@ const HorizontalCardProduct = ({ category, heading }) => {
                     </div>
                     <button
                       className="text-sm bg-red-500 hover:bg-red-600 text-white font-semibold px-3 py-0.5 rounded-lg"
-                      onClick={(e) => handleAddToCart(e, product?._id)}
+                      onClick={(e) => handleAddToCart(e, product)}
                     >
                       Add to Cart
                     </button>

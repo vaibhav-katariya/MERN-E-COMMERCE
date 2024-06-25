@@ -2,13 +2,23 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { FaStar, FaStarHalf } from "react-icons/fa";
-import { Box, Grid } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Button,
+} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Skeleton from "@mui/material/Skeleton";
-import { formatDistanceToNow } from "date-fns";
+import { useSelector } from "react-redux";
 
 const ProductDetails = () => {
   const { id } = useParams();
+  const user = useSelector((state) => state.user.user);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const productImageListLoading = new Array(4).fill(null);
@@ -19,6 +29,13 @@ const ProductDetails = () => {
   });
   const [zoomImage, setZoomImage] = useState(false);
   const [categoryData, setCategoryData] = useState([]);
+  const [openUpdateModal, setOpenUpdateModal] = useState(false);
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    price: "",
+    category: "",
+  });
 
   const navigate = useNavigate();
 
@@ -29,6 +46,12 @@ const ProductDetails = () => {
       setData(product);
       setActiveImage(product.productImages[0]);
       setLoading(false);
+      setFormData({
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        category: product.category,
+      });
 
       // Fetch products by category
       if (product.category) {
@@ -80,9 +103,53 @@ const ProductDetails = () => {
     // Handle buy product logic
   };
 
-  const handleAddToCart = (e, productId) => {
+  const handleAddToCart = (e, product) => {
     e.preventDefault();
-    // Handle add to cart logic
+    try {
+      console.log(product);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const HandleDelete = async (e, productId) => {
+    try {
+      const response = await axios.delete(
+        `/api/v1/product/deleteProduct/${productId}`
+      );
+      console.log(response.data.message);
+      navigate("/");
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const handleUpdate = (e) => {
+    e.preventDefault();
+    setOpenUpdateModal(true);
+  };
+
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.put(
+        `/api/v1/product/updateProduct/${data?._id}`,
+        formData 
+      );
+      console.log(response.data.message);
+      setOpenUpdateModal(false);
+      findProduct();
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
@@ -149,25 +216,25 @@ const ProductDetails = () => {
           {/***product details */}
           {loading ? (
             <div className="grid gap-1 w-full">
-              <p className="bg-slate-200 animate-pulse  h-6 lg:h-8 w-full rounded-full inline-block"></p>
-              <h2 className="text-2xl lg:text-4xl font-medium h-6 lg:h-8  bg-slate-200 animate-pulse w-full"></h2>
-              <p className="capitalize text-slate-400 bg-slate-200 min-w-[100px] animate-pulse h-6 lg:h-8  w-full"></p>
+              <p className="bg-slate-200 animate-pulse h-6 lg:h-8 w-full rounded-full inline-block"></p>
+              <h2 className="text-2xl lg:text-4xl font-medium h-6 lg:h-8 bg-slate-200 animate-pulse w-full"></h2>
+              <p className="capitalize text-slate-400 bg-slate-200 min-w-[100px] animate-pulse h-6 lg:h-8 w-full"></p>
 
-              <div className="text-red-600 bg-slate-200 h-6 lg:h-8  animate-pulse flex items-center gap-1 w-full"></div>
+              <div className="text-red-600 bg-slate-200 h-6 lg:h-8 animate-pulse flex items-center gap-1 w-full"></div>
 
-              <div className="flex items-center gap-2 text-2xl lg:text-3xl font-medium my-1 h-6 lg:h-8  animate-pulse w-full">
+              <div className="flex items-center gap-2 text-2xl lg:text-3xl font-medium my-1 h-6 lg:h-8 animate-pulse w-full">
                 <p className="text-red-600 bg-slate-200 w-full"></p>
                 <p className="text-slate-400 line-through bg-slate-200 w-full"></p>
               </div>
 
               <div className="flex items-center gap-3 my-2 w-full">
-                <button className="h-6 lg:h-8  bg-slate-200 rounded animate-pulse w-full"></button>
-                <button className="h-6 lg:h-8  bg-slate-200 rounded animate-pulse w-full"></button>
+                <button className="h-6 lg:h-8 bg-slate-200 rounded animate-pulse w-full"></button>
+                <button className="h-6 lg:h-8 bg-slate-200 rounded animate-pulse w-full"></button>
               </div>
 
               <div className="w-full">
-                <p className="text-slate-600 font-medium my-1 h-6 lg:h-8   bg-slate-200 rounded animate-pulse w-full"></p>
-                <p className=" bg-slate-200 rounded animate-pulse h-10 lg:h-12  w-full"></p>
+                <p className="text-slate-600 font-medium my-1 h-6 lg:h-8 bg-slate-200 rounded animate-pulse w-full"></p>
+                <p className="bg-slate-200 rounded animate-pulse h-10 lg:h-12 w-full"></p>
               </div>
             </div>
           ) : (
@@ -188,28 +255,43 @@ const ProductDetails = () => {
                   {data?.fakePrice}
                 </p>
               </div>
-
-              <div className="flex items-center gap-3 my-2">
-                <button
-                  className="border-2 border-red-500 rounded px-3 py-1 min-w-[120px] text-red-600 font-medium hover:bg-red-500 hover:text-white"
-                  onClick={(e) => handleBuyProduct(e, data?._id)}
-                >
-                  Buy
-                </button>
-                <button
-                  className="border-2 border-red-500 rounded px-3 py-1 min-w-[120px] font-medium text-white bg-red-500 hover:text-red-600 hover:bg-white"
-                  onClick={(e) => handleAddToCart(e, data?._id)}
-                >
-                  Add To Cart
-                </button>
-              </div>
-
               <div>
                 <p className="text-slate-600 font-medium my-1">
                   Description :{" "}
                 </p>
                 <p>{data?.description}</p>
               </div>
+              {user?._id === data.owner?._id ? (
+                <div className="flex items-center gap-3 my-2">
+                  <button
+                    className="border-2 border-red-500 rounded px-3 py-1 min-w-[120px] text-red-600 font-medium hover:bg-red-500 hover:text-white"
+                    onClick={(e) => HandleDelete(e, data?._id)}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    className="border-2 border-red-500 rounded px-3 py-1 min-w-[120px] font-medium text-white bg-red-500 hover:text-red-600 hover:bg-white"
+                    onClick={handleUpdate}
+                  >
+                    Update
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-3 my-2">
+                  <button
+                    className="border-2 border-red-500 rounded px-3 py-1 min-w-[120px] text-red-600 font-medium hover:bg-red-500 hover:text-white"
+                    onClick={(e) => handleBuyProduct(e, data?._id)}
+                  >
+                    Buy
+                  </button>
+                  <button
+                    className="border-2 border-red-500 rounded px-3 py-1 min-w-[120px] font-medium text-white bg-red-500 hover:text-red-600 hover:bg-white"
+                    onClick={(e) => handleAddToCart(e, data)}
+                  >
+                    Add To Cart
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -264,12 +346,6 @@ const ProductDetails = () => {
                         >
                           {item.owner?.username}
                         </Typography>
-                        {/* <Typography variant="caption" color="text.secondary">
-                          •{" "}
-                          {formatDistanceToNow(new Date(item.createdAt), {
-                            addSuffix: true,
-                          })}
-                        </Typography> */}
                       </Box>
                     </div>
                   ) : (
@@ -284,6 +360,61 @@ const ProductDetails = () => {
           )}
         </Grid>
       </div>
+
+      {/* Update Product Modal */}
+      <Dialog
+        open={openUpdateModal}
+        onClose={() => setOpenUpdateModal(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Update Product</DialogTitle>
+        <DialogContent>
+          <form onSubmit={handleFormSubmit}>
+            <TextField
+              margin="normal"
+              label="Title"
+              name="title"
+              fullWidth
+              value={formData.title}
+              onChange={handleFormChange}
+            />
+            <TextField
+              margin="normal"
+              label="Description"
+              name="description"
+              fullWidth
+              value={formData.description}
+              onChange={handleFormChange}
+            />
+            <TextField
+              margin="normal"
+              label="Price"
+              name="price"
+              type="number"
+              fullWidth
+              value={formData.price}
+              onChange={handleFormChange}
+            />
+            <TextField
+              margin="normal"
+              label="Category"
+              name="category"
+              fullWidth
+              value={formData.category}
+              onChange={handleFormChange}
+            />
+            <DialogActions>
+              <Button onClick={() => setOpenUpdateModal(false)} color="primary">
+                Cancel
+              </Button>
+              <Button type="submit" color="primary" variant="contained">
+                Update
+              </Button>
+            </DialogActions>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

@@ -107,22 +107,21 @@ const getOwnerProducts = async (req, res) => {
 const getProductCategoryProduct = async (req, res) => {
   try {
     const productCategory = await Product.distinct("category");
-    
-    const categoryProduct = []
+
+    const categoryProduct = [];
 
     for (const category of productCategory) {
-      const product = await Product.findOne({category})
+      const product = await Product.findOne({ category });
 
       if (product) {
-        categoryProduct.push(product)
+        categoryProduct.push(product);
       }
     }
 
     res.status(200).json({
       message: "Category products fetched successfully",
       categoryProduct,
-    })
-
+    });
   } catch (error) {
     console.log("error while get product", error);
     return res.status(500).json({
@@ -238,37 +237,38 @@ const updateProduct = async (req, res) => {
       price,
     };
 
-    if (
-      !req.files ||
-      !req.files.productImages ||
-      req.files.productImages.length === 0
-    ) {
-      return res.status(400).json({
-        message: "No images were uploaded",
+    // if (
+    //   !req.files ||
+    //   !req.files.productImages ||
+    //   req.files.productImages.length === 0
+    // ) {
+    //   return res.status(400).json({
+    //     message: "No images were uploaded",
+    //   });
+    // }
+
+    if (req.files) {
+      const publicIds = product.productImages.map((image) => {
+        const imagePathPublicId = image.split("/").pop().split(".")[0];
+        return imagePathPublicId;
       });
+      await fileDeleteOnCloudinary(publicIds);
+
+      const productImages = await Promise.all(
+        req.files.productImages.map(async (file) => {
+          const productImagePath = file.path;
+
+          const productImage = await fileUploadOnCloudinary(productImagePath);
+
+          if (!productImage || !productImage.url) {
+            throw new Error("One or more images could not be uploaded");
+          }
+
+          return productImage.url;
+        })
+      );
+      updateData.productImages = productImages;
     }
-
-    const publicIds = product.productImages.map((image) => {
-      const imagePathPublicId = image.split("/").pop().split(".")[0];
-      return imagePathPublicId;
-    });
-    await fileDeleteOnCloudinary(publicIds);
-
-    const productImages = await Promise.all(
-      req.files.productImages.map(async (file) => {
-        const productImagePath = file.path;
-
-        const productImage = await fileUploadOnCloudinary(productImagePath);
-
-        if (!productImage || !productImage.url) {
-          throw new Error("One or more images could not be uploaded");
-        }
-
-        return productImage.url;
-      })
-    );
-
-    updateData.productImages = productImages;
 
     const updatedProduct = await Product.findByIdAndUpdate(id, updateData, {
       new: true,

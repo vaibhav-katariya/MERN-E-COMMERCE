@@ -74,12 +74,12 @@ const GetAllProduct = () => {
                       >
                         {item.owner?.username}
                       </Typography>
-                      {/* <Typography variant="caption" color="text.secondary">
+                      <Typography variant="caption" color="text.secondary">
                         •{" "}
                         {formatDistanceToNow(new Date(item.createdAt), {
                           addSuffix: true,
                         })}
-                      </Typography> */}
+                      </Typography>
                     </Box>
                   </div>
                 ) : (
