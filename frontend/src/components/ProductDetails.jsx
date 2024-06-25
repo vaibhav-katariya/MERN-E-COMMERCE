@@ -142,7 +142,7 @@ const ProductDetails = () => {
     try {
       const response = await axios.put(
         `/api/v1/product/updateProduct/${data?._id}`,
-        formData 
+        formData
       );
       console.log(response.data.message);
       setOpenUpdateModal(false);
@@ -218,13 +218,13 @@ const ProductDetails = () => {
             <div className="grid gap-1 w-full">
               <p className="bg-slate-200 animate-pulse h-6 lg:h-8 w-full rounded-full inline-block"></p>
               <h2 className="text-2xl lg:text-4xl font-medium h-6 lg:h-8 bg-slate-200 animate-pulse w-full"></h2>
-              <p className="capitalize text-slate-400 bg-slate-200 min-w-[100px] animate-pulse h-6 lg:h-8 w-full"></p>
+              <p className="capitalize  bg-slate-200 min-w-[100px] animate-pulse h-6 lg:h-8 w-full"></p>
 
-              <div className="text-red-600 bg-slate-200 h-6 lg:h-8 animate-pulse flex items-center gap-1 w-full"></div>
+              <div className=" bg-slate-200 h-6 lg:h-8 animate-pulse flex items-center gap-1 w-full"></div>
 
               <div className="flex items-center gap-2 text-2xl lg:text-3xl font-medium my-1 h-6 lg:h-8 animate-pulse w-full">
-                <p className="text-red-600 bg-slate-200 w-full"></p>
-                <p className="text-slate-400 line-through bg-slate-200 w-full"></p>
+                <p className=" bg-slate-200 w-full"></p>
+                <p className=" line-through bg-slate-200 w-full"></p>
               </div>
 
               <div className="flex items-center gap-3 my-2 w-full">
@@ -239,19 +239,19 @@ const ProductDetails = () => {
             </div>
           ) : (
             <div className="flex flex-col justify-center gap-1">
-              <p className="bg-red-200 text-red-600 px-3 py-1 font-semibold rounded-lg inline-block w-fit">
+              <p className="bg-zinc-600 text-white px-3 py-[0.5rem] mb-1 font-semibold rounded-lg inline-block w-fit">
                 {data?.title}
               </p>
               <h2 className="text-2xl lg:text-4xl font-medium">
                 {data?.description}
               </h2>
-              <p className="capitalize text-slate-400">{data?.category}</p>
-              <p className="capitalize text-slate-400">
+              <p className="capitalize text-zinc-500">{data?.category}</p>
+              <p className="capitalize text-zinc-500">
                 {data?.owner?.username}
               </p>
               <div className="flex items-center gap-2 text-2xl lg:text-3xl font-medium my-1">
-                <p className="text-red-500">{data?.price}</p>
-                <p className="text-slate-400 line-through text-xl">
+                <p>{data?.price}</p>
+                <p className="text-zinc-400 line-through text-xl">
                   {data?.fakePrice}
                 </p>
               </div>
@@ -264,13 +264,13 @@ const ProductDetails = () => {
               {user?._id === data.owner?._id ? (
                 <div className="flex items-center gap-3 my-2">
                   <button
-                    className="border-2 border-red-500 rounded px-3 py-1 min-w-[120px] text-red-600 font-medium hover:bg-red-500 hover:text-white"
+                    className="border-2 border-zinc-600  rounded px-3 py-1 min-w-[120px] text-zinc-900 font-medium "
                     onClick={(e) => HandleDelete(e, data?._id)}
                   >
                     Delete
                   </button>
                   <button
-                    className="border-2 border-red-500 rounded px-3 py-1 min-w-[120px] font-medium text-white bg-red-500 hover:text-red-600 hover:bg-white"
+                    className="rounded px-3 py-1 min-w-[120px] font-medium text-white bg-zinc-600  hover:bg-zinc-900"
                     onClick={handleUpdate}
                   >
                     Update
@@ -279,13 +279,13 @@ const ProductDetails = () => {
               ) : (
                 <div className="flex items-center gap-3 my-2">
                   <button
-                    className="border-2 border-red-500 rounded px-3 py-1 min-w-[120px] text-red-600 font-medium hover:bg-red-500 hover:text-white"
+                    className="border-2 border-zinc-600 rounded px-3 py-1 min-w-[120px] text-zinc-900 font-medium "
                     onClick={(e) => handleBuyProduct(e, data?._id)}
                   >
                     Buy
                   </button>
                   <button
-                    className="border-2 border-red-500 rounded px-3 py-1 min-w-[120px] font-medium text-white bg-red-500 hover:text-red-600 hover:bg-white"
+                    className="rounded px-3 py-1 min-w-[120px] font-medium text-white bg-zinc-600  hover:bg-zinc-900"
                     onClick={(e) => handleAddToCart(e, data)}
                   >
                     Add To Cart

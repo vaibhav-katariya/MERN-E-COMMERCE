@@ -109,15 +109,15 @@ const HorizontalCardProduct = ({ category, heading }) => {
                       {product?.category}
                     </p>
                     <div className="flex gap-2">
-                      <p className="text-red-600 font-medium">
+                      <p className="font-medium">
                         {product?.price}
                       </p>
-                      <p className="text-slate-500 line-through">
+                      <p className="text-zinc-500 line-through">
                         {product?.fakePrice}
                       </p>
                     </div>
                     <button
-                      className="text-sm bg-red-500 hover:bg-red-600 text-white font-semibold px-3 py-0.5 rounded-lg"
+                      className="text-sm bg-zinc-600 hover:bg-zinc-900 text-white font-semibold px-3 py-[0.4rem] mt-1 rounded-lg"
                       onClick={(e) => handleAddToCart(e, product)}
                     >
                       Add to Cart

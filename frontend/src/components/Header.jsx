@@ -119,34 +119,31 @@ const Header = () => {
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >
-          <Link to={"/profile/userProfile"}>
-            <MenuItem onClick={handleClose} to={"/profile"}>
-              {user ? (
-                <div className="flex items-center gap-2">
-                  <img
-                    className="h-8 w-8 object-cover rounded-full"
-                    src={user?.avatar}
-                    alt={user?.username}
-                  />
-                  <Typography textAlign="center">{user?.username}</Typography>
-                </div>
-              ) : (
-                <div className="flex">
-                  <Avatar />
-                  <Typography textAlign="center">Profile</Typography>
-                </div>
-              )}
-            </MenuItem>
-          </Link>
-          <Divider />
-          <Link to={"/setting/changeUserDetails"}>
-            <MenuItem onClick={handleClose}>
-              <ListItemIcon>
-                <Settings fontSize="small" />
-              </ListItemIcon>
-              Settings
-            </MenuItem>
-          </Link>
+          {user && (
+            <>
+              <Link to={"/profile/userProfile"}>
+                <MenuItem onClick={handleClose} to={"/profile"}>
+                  <div className="flex items-center gap-2">
+                    <img
+                      className="h-8 w-8 object-cover rounded-full"
+                      src={user?.avatar}
+                      alt={user?.username}
+                    />
+                    <Typography textAlign="center">{user?.username}</Typography>
+                  </div>
+                </MenuItem>
+              </Link>
+              <Divider />
+              <Link to={"/setting/changeUserDetails"}>
+                <MenuItem onClick={handleClose}>
+                  <ListItemIcon>
+                    <Settings fontSize="small" />
+                  </ListItemIcon>
+                  Settings
+                </MenuItem>
+              </Link>
+            </>
+          )}
           <MenuItem onClick={handleClose}>
             <ListItemIcon>
               <Logout fontSize="small" />
@@ -162,9 +159,11 @@ const Header = () => {
             )}
           </MenuItem>
         </Menu>
-        <div className="text-3xl">
-          <IoCartSharp />
-        </div>
+        {user && (
+          <div className="text-3xl">
+            <IoCartSharp />
+          </div>
+        )}
       </div>
     </div>
   );
