@@ -243,6 +243,43 @@ const getCorrentUser = async (req, res) => {
   }
 };
 
+const getAllUser = async (req, res) => {
+  try {
+    const currUserId = req.user._id;
+
+    if (!currUserId) {
+      return res.status(400).json({
+        message: "User not found",
+      });
+    }
+
+    const findUser = await User.findById(currUserId);
+
+    if (!findUser) {
+      return res.status(400).json({
+        message: "User not found",
+      });
+    }
+
+    if (findUser?.role !== "admin") {
+      return res.status(403).json({
+        message: "Access denied",
+      });
+    }
+
+    const user = await User.find().select("-password -refreshToken");
+
+    res.status(200).json({
+      user,
+    });
+  } catch (error) {
+    console.error("Error while get all the user:", error);
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
 const updateUserDetails = async (req, res) => {
   const { username, email, role } = req.body;
 
@@ -252,7 +289,10 @@ const updateUserDetails = async (req, res) => {
       throw new Error("User not found");
     }
 
-    if (user?._id.toString() !== req.user?._id.toString()) {
+    if (
+      user?._id.toString() !== req.user?._id.toString() ||
+      user?.role !== "admin"
+    ) {
       return res.status(401).json({
         message: "Unauthorized to change user details",
       });
@@ -333,4 +373,5 @@ export {
   changePassword,
   getCorrentUser,
   updateUserDetails,
+  getAllUser,
 };

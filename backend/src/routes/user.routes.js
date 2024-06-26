@@ -2,6 +2,7 @@ import { Router } from "express";
 import { upload } from "../middleware/multer.middlerware.js";
 import {
   changePassword,
+  getAllUser,
   getCorrentUser,
   loginUser,
   logoutUser,
@@ -30,5 +31,6 @@ router.route("/update-user-details").put(
   ]),
   updateUserDetails
 );
+router.route("/alluser").get(verifyJWT , getAllUser)
 
 export default router;

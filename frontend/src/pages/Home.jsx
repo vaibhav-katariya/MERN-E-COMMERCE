@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <div>
       <GetCategoryWiseOneProduct />
-      <HorizontalCardProduct  category={"watches"} heading={"Popular's Watches"} />
+
       <HorizontalCardProduct category={"Airdopes"} heading={"Top's Airpodes"}/>
 
       <VerticalCardProduct category={"earphones"} heading={"Wired Earphones"}/>

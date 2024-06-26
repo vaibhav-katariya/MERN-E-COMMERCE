@@ -23,6 +23,9 @@ import UploadProduct from "./components/UploadProduct.jsx";
 import GetAllProduct from "./components/GetAllProduct.jsx";
 import ProductDetails from "./components/ProductDetails.jsx";
 import Cart from "./pages/Cart.jsx";
+import AdminPage from "./pages/AdminPage.jsx";
+import ProtectedRoute from "./helpers/ProtectedRoute.jsx";
+import ProtectedAdmin from "./helpers/ProtectedAdmin.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -31,17 +34,74 @@ const router = createBrowserRouter(
       <Route path="/" element={<Home />} />
       <Route path="login" element={<Login />} />
       <Route path="signup" element={<Signup />} />
-      <Route path="profile" element={<Profile />}>
-        <Route path="userProfile" element={<UserProfile />} />
-        <Route path="uploadProduct" element={<UploadProduct />} />
+      <Route
+        path="profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      >
+        <Route
+          path="userProfile"
+          element={
+            <ProtectedRoute>
+              <UserProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="uploadProduct"
+          element={
+            <ProtectedRoute>
+              <UploadProduct />
+            </ProtectedRoute>
+          }
+        />
         <Route path="getAllProduct" element={<GetAllProduct />} />
       </Route>
-      <Route path="setting" element={<Settings />}>
-        <Route path="changePassword" element={<UpdatePassword />} />
-        <Route path="changeUserDetails" element={<UpdateUser />} />
+      <Route
+        path="setting"
+        element={
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        }
+      >
+        <Route
+          path="changePassword"
+          element={
+            <ProtectedRoute>
+              <UpdatePassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="changeUserDetails"
+          element={
+            <ProtectedRoute>
+              <UpdateUser />
+            </ProtectedRoute>
+          }
+        />
       </Route>
       <Route path="productDetails/:id" element={<ProductDetails />} />
-      <Route path="/cart" element={<Cart />} />
+      <Route
+        path="/cart"
+        element={
+          <ProtectedRoute>
+            <Cart />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          <ProtectedAdmin>
+            <AdminPage />
+          </ProtectedAdmin>
+        }
+      />
     </Route>
   )
 );

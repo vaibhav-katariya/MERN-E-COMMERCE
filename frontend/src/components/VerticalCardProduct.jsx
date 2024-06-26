@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
-import {useDispatch} from "react-redux"
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -8,7 +8,7 @@ const VerticalCardProduct = ({ category, heading }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const loadingList = new Array(13).fill(null);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const scrollElement = useRef();
 
   const handleAddToCart = async (e, product) => {
@@ -53,18 +53,22 @@ const VerticalCardProduct = ({ category, heading }) => {
         className="flex items-center gap-4 md:gap-6 overflow-x-scroll scrollbar-none transition-all"
         ref={scrollElement}
       >
-        <button
-          className="bg-white shadow-md rounded-full p-2 absolute left-0 text-lg hidden md:block z-10"
-          onClick={scrollLeft}
-        >
-          <FaAngleLeft />
-        </button>
-        <button
-          className="bg-white shadow-md rounded-full p-2 absolute right-0 text-lg hidden md:block z-10"
-          onClick={scrollRight}
-        >
-          <FaAngleRight />
-        </button>
+        {data.length >= 4 && (
+          <>
+            <button
+              className="bg-white shadow-md rounded-full p-2 absolute left-0 text-lg hidden md:block z-10"
+              onClick={scrollLeft}
+            >
+              <FaAngleLeft />
+            </button>
+            <button
+              className="bg-white shadow-md rounded-full p-2 absolute right-0 text-lg hidden md:block z-10"
+              onClick={scrollRight}
+            >
+              <FaAngleRight />
+            </button>
+          </>
+        )}
         {loading
           ? loadingList.map((_, index) => (
               <div
@@ -103,9 +107,7 @@ const VerticalCardProduct = ({ category, heading }) => {
                     {product?.category}
                   </p>
                   <div className="flex gap-2">
-                    <p className="text-lg font-medium">
-                      {product?.price}
-                    </p>
+                    <p className="text-lg font-medium">{product?.price}</p>
                     <p className="text-zinc-500 text-lg line-through">
                       {product?.fakePrice}
                     </p>
