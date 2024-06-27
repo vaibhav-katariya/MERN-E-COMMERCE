@@ -366,6 +366,87 @@ const updateUserDetails = async (req, res) => {
   }
 };
 
+const updateRole = async (req, res) => {
+  try {
+    const { role, id } = req.body;
+
+    const isAdminId = req.user?._id;
+
+    const isAdmin = await User.findById(isAdminId);
+
+    console.log(isAdmin.role);
+
+    if (isAdmin.role !== "admin") {
+      return res.status(401).json({
+        message: "You are not authorized to perform this action",
+      });
+    }
+
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+    const updateUser = await User.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          role: role,
+        },
+      },
+      { new: true }
+    ).select("-password -refreshToken");
+    if (!updateUser) {
+      return res.status(500).json({
+        message: "Failed to update user details",
+      });
+    }
+    res.status(200).json({
+      message: "User details updated successfully",
+      updateUser,
+    });
+  } catch (error) {
+    console.error("Error while update the user role:", error);
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const isAdminId = req.user?._id;
+    const isAdmin = await User.findById(isAdminId);
+    if (isAdmin.role !== "admin") {
+      return res.status(401).json({
+        message: "You are not authorized to perform this action",
+      });
+    }
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    const avatar_public_id = user.avatar.split("/").pop().split(".")[0];
+
+    await fileDeleteOnCloudinary(avatar_public_id);
+
+    await User.findByIdAndDelete(id);
+    res.status(200).json({
+      message: "User deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error while deleting the user:", error);
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
 export {
   registerUser,
   loginUser,
@@ -374,4 +455,6 @@ export {
   getCorrentUser,
   updateUserDetails,
   getAllUser,
+  updateRole,
+  deleteUser,
 };
