@@ -36,6 +36,15 @@ const Profile = () => {
             </div>
           </div>
         )}
+        {user.role === "admin" && (
+          <div className="my-5">
+            <Link to={"alluser"}>
+              <p className="border-[1px] p-2 my-3 border-zinc-300 hover:bg-zinc-100">
+                All User
+              </p>
+            </Link>
+          </div>
+        )}
       </div>
       <div className="h-full w-full">
         <ProfileLayout />

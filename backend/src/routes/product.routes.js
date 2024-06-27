@@ -5,6 +5,7 @@ import {
   deleteProduct,
   getAllProduct,
   getOwnerProducts,
+  getProduct,
   getProductById,
   getProductCategoryProduct,
   getProductsByCategory,
@@ -19,6 +20,8 @@ router.route("/getProductsByCategory/:category").get(getProductsByCategory);
 router.route("/getProductById/:id").get(getProductById);
 router.route("/getAllProduct").get(getAllProduct);
 router.route("/getCategoryProduct").get(getProductCategoryProduct);
+router.route("/deleteProduct/:id").delete(verifyJWT, deleteProduct);
+router.route("/getProduct").get(getProduct)
 
 router
   .route("/upload")
@@ -27,7 +30,7 @@ router
     upload.fields([{ name: "productImages", maxCount: 4 }]),
     uploadProduct
   );
-  
+
 router
   .route("/updateProduct/:id")
   .put(
@@ -36,5 +39,4 @@ router
     updateProduct
   );
 
-router.route("/deleteProduct/:id").delete(verifyJWT, deleteProduct);
 export default router;

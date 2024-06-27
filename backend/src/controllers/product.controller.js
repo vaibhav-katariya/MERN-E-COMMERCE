@@ -1,5 +1,6 @@
 import { Product } from "../model/product.model.js";
 import { User } from "../model/user.model.js";
+import { apiFeatures } from "../utils/apiFeatures.js";
 import {
   fileDeleteOnCloudinary,
   fileUploadOnCloudinary,
@@ -187,6 +188,7 @@ const getProductById = async (req, res) => {
   }
 };
 
+// get all product (admin)
 const getAllProduct = async (req, res) => {
   try {
     const product = await Product.find({}).populate({
@@ -328,6 +330,30 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+// add filter
+const getProduct = async (req, res) => {
+  const resultPerPage = 6;
+
+  const productCount = await Product.countDocuments();
+
+  const ApiFeatures = new apiFeatures(Product.find(), req.query)
+    .search()
+    .filter()
+    .pagination(resultPerPage);
+
+  let products = await ApiFeatures.query;
+
+  const filterProductCount = products.length;
+
+  res.status(200).json({
+    success: true,
+    products,
+    productCount,
+    resultPerPage,
+    filterProductCount,
+  });
+};
+
 export {
   uploadProduct,
   getOwnerProducts,
@@ -337,4 +363,5 @@ export {
   deleteProduct,
   getProductsByCategory,
   getProductCategoryProduct,
+  getProduct,
 };

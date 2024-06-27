@@ -23,8 +23,8 @@ import UploadProduct from "./components/UploadProduct.jsx";
 import GetAllProduct from "./components/GetAllProduct.jsx";
 import ProductDetails from "./components/ProductDetails.jsx";
 import Cart from "./pages/Cart.jsx";
-import AdminPage from "./pages/AdminPage.jsx";
 import ProtectedRoute from "./helpers/ProtectedRoute.jsx";
+import Alluser from "./components/Alluser.jsx";
 import ProtectedAdmin from "./helpers/ProtectedAdmin.jsx";
 
 const router = createBrowserRouter(
@@ -58,7 +58,22 @@ const router = createBrowserRouter(
             </ProtectedRoute>
           }
         />
-        <Route path="getAllProduct" element={<GetAllProduct />} />
+        <Route
+          path="getAllProduct"
+          element={
+            <ProtectedRoute>
+              <GetAllProduct />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="alluser"
+          element={
+            <ProtectedAdmin>
+              <Alluser />
+            </ProtectedAdmin>
+          }
+        />
       </Route>
       <Route
         path="setting"
@@ -87,19 +102,11 @@ const router = createBrowserRouter(
       </Route>
       <Route path="productDetails/:id" element={<ProductDetails />} />
       <Route
-        path="/cart"
+        path="cart"
         element={
           <ProtectedRoute>
             <Cart />
           </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin"
-        element={
-          <ProtectedAdmin>
-            <AdminPage />
-          </ProtectedAdmin>
         }
       />
     </Route>
