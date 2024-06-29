@@ -374,8 +374,6 @@ const updateRole = async (req, res) => {
 
     const isAdmin = await User.findById(isAdminId);
 
-    console.log(isAdmin.role);
-
     if (isAdmin.role !== "admin") {
       return res.status(401).json({
         message: "You are not authorized to perform this action",

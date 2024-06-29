@@ -354,6 +354,120 @@ const getProduct = async (req, res) => {
   });
 };
 
+const createProductReview = async (req, res) => {
+  const { productId } = req.params;
+  const { rating, comment } = req.body;
+
+  const product = await Product.findById(productId);
+
+  if (!product) {
+    return res.status(404).json({
+      success: false,
+      message: "Product not found",
+    });
+  }
+
+  const isReviewed = product.reviews.find(
+    (rev) => rev.user._id.toString() === req.user._id.toString()
+  );
+
+  if (isReviewed) {
+    product.reviews.forEach((rev) => {
+      if (rev.user._id.toString() === req.user._id.toString())
+        (rev.rating = rating), (rev.comment = comment);
+    });
+  } else {
+    const review = {
+      user: req.user._id,
+      rating: rating,
+      comment: comment,
+    };
+    product.reviews.push(review);
+    product.numOfReviews = product.reviews.length;
+  }
+
+  let totalRating = 0;
+
+  product.reviews.forEach((rev) => (totalRating += rev.rating));
+
+  product.ratings = totalRating / product.reviews.length;
+
+  await product.save({ validateBeforeSave: false });
+  res.status(200).json({
+    success: true,
+    message: "review created successfully",
+  });
+};
+
+const getProductReview = async (req, res) => {
+  const { productId } = req.params;
+  const product = await Product.findById(productId).populate({
+    path: "reviews",
+    populate: {
+      path: "user",
+      model: "User",
+      select: "username avatar createdAt",
+    },
+  });
+  if (!product) {
+    return res.status(404).json({
+      success: false,
+      message: "Product not found",
+    });
+  }
+  res.status(200).json({
+    success: true,
+    message: "Product found",
+    data: product,
+  });
+};
+
+const deleteProductReview = async (req, res) => {
+  const { productId, reviewId } = req.params;
+  const product = await Product.findById(productId);
+
+  if (!product) {
+    return res.status(404).json({
+      success: false,
+      message: "Product not found",
+    });
+  }
+
+  const reviews = product.reviews.filter(
+    (rev) => rev._id.toString() !== reviewId.toString()
+  );
+
+  let totalRating = 0;
+
+  reviews.forEach((rev) => (totalRating += rev.rating));
+
+  let ratings = 0;
+
+  if (reviews.length === 0) {
+    ratings = 0;
+  } else {
+    ratings = totalRating / reviews.length;
+  }
+
+  const numOfReviews = reviews.length;
+
+  await Product.findByIdAndUpdate(
+    productId,
+    {
+      ratings,
+      numOfReviews,
+      reviews,
+    },
+    {
+      new: true,
+    }
+  );
+  res.status(200).json({
+    success: true,
+    message: "Review deleted successfully",
+  });
+};
+
 export {
   uploadProduct,
   getOwnerProducts,
@@ -364,4 +478,7 @@ export {
   getProductsByCategory,
   getProductCategoryProduct,
   getProduct,
+  createProductReview,
+  getProductReview,
+  deleteProductReview
 };
