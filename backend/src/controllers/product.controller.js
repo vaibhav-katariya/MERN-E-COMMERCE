@@ -405,8 +405,7 @@ const getProductReview = async (req, res) => {
     path: "reviews",
     populate: {
       path: "user",
-      model: "User",
-      select: "username avatar createdAt",
+      select: "username avatar",
     },
   });
   if (!product) {
@@ -417,8 +416,8 @@ const getProductReview = async (req, res) => {
   }
   res.status(200).json({
     success: true,
-    message: "Product found",
-    data: product,
+    message: "Product reviews found",
+    data: product.reviews,
   });
 };
 
@@ -480,5 +479,5 @@ export {
   getProduct,
   createProductReview,
   getProductReview,
-  deleteProductReview
+  deleteProductReview,
 };
