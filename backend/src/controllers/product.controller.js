@@ -25,6 +25,19 @@ const uploadProduct = async (req, res) => {
       });
     }
 
+    const user = await User.findById(req.user?._id);
+    if (!user) {
+      return res.status(400).json({
+        message: "User not found",
+      });
+    }
+
+    if (user.role === "user") {
+      return res.status(400).json({
+        message: "You are not authorized to upload products",
+      });
+    }
+
     const productImages = await Promise.all(
       req.files.productImages.map(async (file) => {
         const productImagePath = file.path;
@@ -191,6 +204,20 @@ const getProductById = async (req, res) => {
 // get all product (admin)
 const getAllProduct = async (req, res) => {
   try {
+    const user = await User.findById(req.user?._id);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    if (user.role !== "admin") {
+      return res.status(403).json({
+        message: "You are not authorized to perform this action",
+      });
+    }
+
     const product = await Product.find({}).populate({
       path: "owner",
       select: "-password -refreshToken",

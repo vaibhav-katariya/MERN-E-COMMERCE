@@ -289,10 +289,7 @@ const updateUserDetails = async (req, res) => {
       throw new Error("User not found");
     }
 
-    if (
-      user?._id.toString() !== req.user?._id.toString() ||
-      user?.role !== "admin"
-    ) {
+    if (user?._id.toString() !== req.user?._id.toString()) {
       return res.status(401).json({
         message: "Unauthorized to change user details",
       });

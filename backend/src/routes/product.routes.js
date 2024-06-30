@@ -21,7 +21,7 @@ const router = Router();
 router.route("/getOwnerProduct/:username").get(getOwnerProducts);
 router.route("/getProductsByCategory/:category").get(getProductsByCategory);
 router.route("/getProductById/:id").get(getProductById);
-router.route("/getAllProduct").get(getAllProduct);
+router.route("/getAllProduct").get(verifyJWT ,getAllProduct);
 router.route("/getCategoryProduct").get(getProductCategoryProduct);
 router.route("/deleteProduct/:id").delete(verifyJWT, deleteProduct);
 router.route("/getProduct").get(getProduct);
