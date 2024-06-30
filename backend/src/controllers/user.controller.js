@@ -5,6 +5,7 @@ import {
   fileDeleteOnCloudinary,
   fileUploadOnCloudinary,
 } from "../utils/fileUploader.js";
+import { sendEmail } from "../utils/sendMail.js";
 
 const genAccessTokenAndRefreshToken = async (userId) => {
   try {
@@ -69,6 +70,12 @@ const registerUser = async (req, res) => {
     });
 
     const createdUser = await User.findById(user._id).select("-password");
+
+    await sendEmail({
+      email: createdUser.email,
+      subject: "Welcome to the app",
+      html: `<h1>Welcome to the app</h1>`,
+    })
 
     if (!createdUser) {
       return res.status(500).json({
