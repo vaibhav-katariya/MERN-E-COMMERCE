@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Product } from "./product.model";
+import { Product } from "./product.model.js";
 
 const orderSchema = new mongoose.Schema(
   {
@@ -42,7 +42,7 @@ const orderSchema = new mongoose.Schema(
           required: true,
         },
         product: {
-          type: mongoose.Schema.Types.ObjectId,
+          type: mongoose.Schema.ObjectId,
           ref: "Product",
           required: true,
         },
