@@ -26,6 +26,7 @@ import Cart from "./pages/Cart.jsx";
 import ProtectedRoute from "./helpers/ProtectedRoute.jsx";
 import Alluser from "./components/Alluser.jsx";
 import ProtectedAdmin from "./helpers/ProtectedAdmin.jsx";
+import SearchProducts from "./components/SearchProducts.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -101,6 +102,7 @@ const router = createBrowserRouter(
         />
       </Route>
       <Route path="productDetails/:id" element={<ProductDetails />} />
+      <Route path="search/:keyword" element={<SearchProducts />} />
       <Route
         path="cart"
         element={

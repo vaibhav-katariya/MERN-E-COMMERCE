@@ -4,11 +4,10 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-const VerticalCardProduct = ({ category, heading }) => {
+const VerticalCardProduct = ({ keyword, heading }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const loadingList = new Array(13).fill(null);
-  const dispatch = useDispatch();
   const scrollElement = useRef();
 
   const handleAddToCart = async (e, product) => {
@@ -21,11 +20,12 @@ const VerticalCardProduct = ({ category, heading }) => {
   };
 
   const fetchData = async () => {
-    const categoryProduct = await axios.get(
-      `/api/v1/product/getProductsByCategory/${category}`
+    const getProduct = await axios.get(
+      `/api/v1/product/getProduct?keyword=${keyword}`
     );
     setLoading(false);
-    setData(categoryProduct?.data?.data);
+    console.log(getProduct.data);
+    setData(getProduct?.data.products);
   };
 
   useEffect(() => {

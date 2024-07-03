@@ -3,9 +3,9 @@ import { FaSearch } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { logout } from "../store/userSlice";
-import { Link, useNavigate } from "react-router-dom";
-import Settings from "@mui/icons-material/Settings";
-import Logout from "@mui/icons-material/Logout";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import SettingsIcon from "@mui/icons-material/Settings";
+import LogoutIcon from "@mui/icons-material/Logout";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
@@ -14,26 +14,34 @@ import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import { Typography } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import { IoCartSharp } from "react-icons/io5";
 
 const Header = () => {
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [keyword, setKeyword] = React.useState("");
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate(`/search/${keyword}`);
+  };
+
   const logoutHandler = async () => {
     try {
-      const res = await axios.post("/api/v1/user/logout");
+      await axios.post("/api/v1/user/logout");
       dispatch(logout());
       navigate("/login");
     } catch (error) {
@@ -43,24 +51,27 @@ const Header = () => {
 
   return (
     <div className="overflow-hidden h-14 shadow-lg border-b-2 flex items-center justify-between md:px-8 px-2">
-      <Link to={"/"}>
-        <h1 className="md:text-xl text-md font-semibold">MY STORE</h1>
-      </Link>
+      <RouterLink to={"/"} style={{ textDecoration: "none", color: "inherit" }}>
+        <Typography variant="h6">MY STORE</Typography>
+      </RouterLink>
       <div className="h-[1.5rem] flex items-center">
         <input
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
           type="text"
           name="search"
           placeholder="Search Products....."
           className="px-2 rounded-ss-lg border-e-0 rounded-es-lg outline-none py-1 border-[1px] border-zinc-700 w-32 md:w-full ms-2"
         />
-        <button className="py-2 border-zinc-700 px-2 border-[1px] bg-zinc-700 text-white rounded-se-lg rounded-ee-lg">
+        <button
+          onClick={handleSearch}
+          className="py-2 border-zinc-700 px-2 border-[1px] bg-zinc-700 text-white rounded-se-lg rounded-ee-lg"
+        >
           <FaSearch />
         </button>
       </div>
       <div className="flex items-center gap-2">
-        <Box
-          sx={{ display: "flex", alignItems: "center", textAlign: "center" }}
-        >
+        <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
           <Tooltip title="Account">
             <IconButton
               onClick={handleClick}
@@ -74,8 +85,8 @@ const Header = () => {
                 <Avatar sx={{ width: 32, height: 32 }}>
                   <img
                     className="h-full w-full object-cover"
-                    src={user?.avatar}
-                    alt={user?.username}
+                    src={user.avatar}
+                    alt={user.username}
                   />
                 </Avatar>
               ) : (
@@ -89,7 +100,6 @@ const Header = () => {
           id="account-menu"
           open={open}
           onClose={handleClose}
-          onClick={handleClose}
           PaperProps={{
             elevation: 0,
             sx: {
@@ -119,45 +129,39 @@ const Header = () => {
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >
-          {user && (
+          {user ? (
             <>
-              <Link to={"/profile/userProfile"}>
-                <MenuItem onClick={handleClose} to={"/profile"}>
-                  <div className="flex items-center gap-2">
-                    <img
-                      className="h-8 w-8 object-cover rounded-full"
-                      src={user?.avatar}
-                      alt={user?.username}
-                    />
-                    <Typography textAlign="center">{user?.username}</Typography>
-                  </div>
+              <RouterLink to={"/profile/userProfile"} style={{ textDecoration: "none", color: "inherit" }}>
+                <MenuItem onClick={handleClose}>
+                  <Box display="flex" alignItems="center" gap={2}>
+                    <Avatar src={user.avatar} alt={user.username} />
+                    <Typography>{user.username}</Typography>
+                  </Box>
                 </MenuItem>
-              </Link>
+              </RouterLink>
               <Divider />
-              <Link to={"/setting/changeUserDetails"}>
+              <RouterLink to={"/setting/changeUserDetails"} style={{ textDecoration: "none", color: "inherit" }}>
                 <MenuItem onClick={handleClose}>
                   <ListItemIcon>
-                    <Settings fontSize="small" />
+                    <SettingsIcon fontSize="small" />
                   </ListItemIcon>
                   Settings
                 </MenuItem>
-              </Link>
-            </>
-          )}
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <Logout fontSize="small" />
-            </ListItemIcon>
-            {user !== null ? (
-              <div onClick={logoutHandler} className="">
+              </RouterLink>
+              <MenuItem onClick={logoutHandler}>
+                <ListItemIcon>
+                  <LogoutIcon fontSize="small" />
+                </ListItemIcon>
                 Logout
-              </div>
-            ) : (
-              <Link to={"/login"}>
-                <div className="">Login</div>
-              </Link>
-            )}
-          </MenuItem>
+              </MenuItem>
+            </>
+          ) : (
+            <MenuItem>
+              <RouterLink to={"/login"} style={{ textDecoration: "none", color: "inherit" }}>
+                Login
+              </RouterLink>
+            </MenuItem>
+          )}
         </Menu>
         {user && (
           <div className="text-3xl">
