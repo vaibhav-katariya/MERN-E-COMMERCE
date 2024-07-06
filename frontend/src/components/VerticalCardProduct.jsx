@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Typography from "@mui/material/Typography";
 import Slider from "@mui/material/Slider";
-import { Box } from "@mui/material";
+import { Box, Pagination, Stack } from "@mui/material";
 
 const VerticalCardProduct = ({ keyword, heading }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const loadingList = new Array(13).fill(null);
+  const loadingList = new Array(6).fill(null);
   const [price, setPrice] = useState([0, 25000]);
+  const [ratings, setRatings] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [filterProduct, setFilterProduct] = useState(1);
+  const [resultPerPage, setResultPerPage] = useState(6);
+  const [productsCount, setProductsCount] = useState(1);
+
   const handleAddToCart = async (e, product) => {
     e.preventDefault();
     try {
@@ -25,68 +30,70 @@ const VerticalCardProduct = ({ keyword, heading }) => {
     setPrice(newPrice);
   };
 
+  const handleChange = (event, value) => {
+    setCurrentPage(value);
+  };
+
   const fetchData = async () => {
+    setLoading(true);
     const getProduct = await axios.get(
-      `/api/v1/product/getProduct?keyword=${keyword}&price[gte]=${price[0]}&price[lte]=${price[1]}`
+      `/api/v1/product/getProduct?keyword=${keyword}&price[gte]=${price[0]}&price[lte]=${price[1]}&ratings[gte]=${ratings}&page=${currentPage}`
     );
     setLoading(false);
     console.log(getProduct.data);
+    setFilterProduct(getProduct.data.filterProductCount);
+    setResultPerPage(getProduct.data.resultPerPage);
+    setProductsCount(getProduct.data.productCount);
     setData(getProduct?.data.products);
   };
 
   useEffect(() => {
     fetchData();
-  }, [keyword, price]);
+  }, [keyword, price, ratings, currentPage]);
+
+  const totalPages = Math.ceil(productsCount / resultPerPage);
 
   return (
     <div className="container w-full flex md:flex-row flex-col my-6 mx-4 relative">
-      <div className="md:w-[25%] mx-5">
-        <Typography>Price</Typography>
-        <Box sx={{ width: 250}}>
-          <Slider
-            value={price}
-            onChange={priceHandler}
-            valueLabelDisplay="auto"
-            aria-labelledby="range-slider"
-            min={0}
-            max={25000}
-          />
-        </Box>
+      {data.length > 0 && (
+        <>
+          <div className="md:w-[25%] mx-5 sticky">
+            <Typography>Price</Typography>
+            <Box sx={{ width: 250 }}>
+              <Slider
+                value={price}
+                onChange={priceHandler}
+                valueLabelDisplay="auto"
+                aria-labelledby="range-slider"
+                min={0}
+                max={25000}
+              />
+            </Box>
 
-        {/* <Typography>Categories</Typography>
-                  <ul className="categoryBox">
-                    {categories.map((category) => (
-                      <li
-                        className="category-link"
-                        key={category}
-                        onClick={() => setCategory(category)}
-                      >
-                        {category}
-                      </li>
-                    ))}
-                  </ul> */}
-
-        {/* <fieldset>
-                    <Typography component="legend">Ratings Above</Typography>
-                    <Slider
-                      value={ratings}
-                      onChange={(e, newRating) => {
-                        setRatings(newRating);
-                      }}
-                      aria-labelledby="continuous-slider"
-                      valueLabelDisplay="auto"
-                      min={0}
-                      max={5}
-                    />
-                  </fieldset> */}
-      </div>
-      <div className="md:w-[75%] flex gap-2">
+            <fieldset>
+              <Typography component="legend">Ratings Above</Typography>
+              <Slider
+                sx={{ width: 250 }}
+                value={ratings}
+                onChange={(e, newRating) => {
+                  setRatings(newRating);
+                }}
+                aria-labelledby="continuous-slider"
+                valueLabelDisplay="auto"
+                min={0}
+                max={5}
+              />
+            </fieldset>
+          </div>
+        </>
+      )}
+      <div className="md:w-[70%] flex gap-2 flex-wrap">
         {data.length > 0
           ? loading
             ? loadingList.map((_, index) => (
                 <div
                   key={index}
-                  className="w-full min-w-[280px] md:min-w-[320px] max-w-[280px] md:max-w-[320px] bg-white rounded-lg shadow-lg overflow-hidden"
+                  className="w-full  min-w-[150px] md:min-w-[290px] max-w-[170px] md:max-w-[290px] bg-white rounded-lg shadow-lg overflow-hidden"
                 >
                   <div className="bg-slate-200 h-48 p-4 flex justify-center items-center animate-pulse"></div>
                   <div className="p-4 grid gap-3">
@@ -101,11 +108,11 @@ const VerticalCardProduct = ({ keyword, heading }) => {
                 </div>
               ))
             : data.map((product, index) => (
-                <div className="flex justify-center">
+                <div className="flex justify-between">
                   <Link
                     key={index}
                     to={`/productDetails/${product?._id}`}
-                    className="w-full min-w-[150px] md:min-w-[320px] max-w-[170px] md:max-w-[320px] bg-white rounded-lg shadow-lg overflow-hidden transition-transform "
+                    className=" w-[170px] md:w-[290px] bg-white rounded-lg shadow-lg transition-transform  overflow-hidden"
                   >
                     <div className="bg-zinc-200 h-48 p-4 flex justify-center items-center">
                       <img
@@ -137,6 +144,18 @@ const VerticalCardProduct = ({ keyword, heading }) => {
                       </button>
                     </div>
                   </Link>
+
+                  {totalPages > 1 && (
+                    <div className="absolute -bottom-10 end-10">
+                      <Stack spacing={2}>
+                        <Pagination
+                          count={totalPages}
+                          page={currentPage}
+                          onChange={handleChange}
+                        />
+                      </Stack>
+                    </div>
+                  )}
                 </div>
               ))
           : "product not found"}

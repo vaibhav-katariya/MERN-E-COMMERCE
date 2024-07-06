@@ -7,7 +7,8 @@ import {
 } from "../utils/fileUploader.js";
 
 const uploadProduct = async (req, res) => {
-  const { title, description, fakePrice, price, category, rating , stock } = req.body;
+  const { title, description, fakePrice, price, category, rating, stock } =
+    req.body;
   try {
     if (!title || !description || !fakePrice || !price || !category || !stock) {
       return res.status(400).json({
@@ -61,7 +62,7 @@ const uploadProduct = async (req, res) => {
       rating,
       productImages,
       owner: req.user?._id,
-      stock
+      stock,
     });
 
     const createdProduct = await Product.findById(product._id);
@@ -242,7 +243,7 @@ const getAllProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   const { id } = req.params;
-  const { title, description, fakePrice, price, category , stock } = req.body;
+  const { title, description, fakePrice, price, category, stock } = req.body;
 
   try {
     const product = await Product.findById(id);
@@ -265,7 +266,7 @@ const updateProduct = async (req, res) => {
       category,
       fakePrice,
       price,
-      stock
+      stock,
     };
 
     // if (
