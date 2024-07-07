@@ -45,7 +45,7 @@ const Home = () => {
     <>
       <GetCategoryWiseOneProduct />
       <div className="container w-full mx-auto my-6 flex justify-center relative">
-        <div className="flex justify-center w-full gap-2 flex-wrap">
+        <div className="flex justify-center md:justify-start w-full gap-2 flex-wrap">
           {data.length < 0
             ? loadingList.map((_, index) => (
                 <div

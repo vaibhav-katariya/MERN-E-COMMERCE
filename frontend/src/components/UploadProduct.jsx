@@ -9,6 +9,7 @@ const UploadProduct = () => {
     price: 0,
     fakePrice: 0,
     category: "",
+    stock: 1,
   });
   const [message, setMessage] = useState("");
   const [images, setImages] = useState([]);
@@ -24,7 +25,8 @@ const UploadProduct = () => {
     formData.append("price", data.price);
     formData.append("fakePrice", data.fakePrice);
     formData.append("category", data.category);
-    
+    formData.append("stock", data.stock);
+
     images.forEach((image) => {
       formData.append("productImages", image);
     });
@@ -114,6 +116,17 @@ const UploadProduct = () => {
             type="number"
             name="price"
             placeholder="New Price"
+            inputMode="numeric"
+          />
+        </div>
+        <div>
+          <input
+            value={data.stock}
+            onChange={handleChange}
+            className="border-[1px] border-zinc-300 w-full px-3 py-2 placeholder:text-lg my-3 rounded-lg outline-none"
+            type="number"
+            name="stock"
+            placeholder="stock"
             inputMode="numeric"
           />
         </div>

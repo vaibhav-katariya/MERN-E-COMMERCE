@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { FaStar, FaStarHalf } from "react-icons/fa";
+import Rating from "@mui/material/Rating";
 import {
   Box,
   Grid,
@@ -35,9 +36,17 @@ const ProductDetails = () => {
     description: "",
     price: "",
     category: "",
+    stock: "",
   });
 
   const navigate = useNavigate();
+
+  const options = {
+    size: "large",
+    value: data?.ratings,
+    readOnly: true,
+    precision: 0.5,
+  };
 
   const findProduct = async () => {
     try {
@@ -51,6 +60,7 @@ const ProductDetails = () => {
         description: product.description,
         price: product.price,
         category: product.category,
+        stock: product.stock,
       });
 
       // Fetch products by category
@@ -245,6 +255,13 @@ const ProductDetails = () => {
               <h2 className="text-2xl lg:text-4xl font-medium">
                 {data?.description}
               </h2>
+              <div className="flex items-center gap-1">
+                <Rating {...options} />
+                <span className="detailsBlock-2-span">
+                  {" "}
+                  ({data?.numOfReviews} Reviews)
+                </span>
+              </div>
               <p className="capitalize text-zinc-500">{data?.category}</p>
               <p className="capitalize text-zinc-500">
                 {data?.owner?.username}
@@ -394,6 +411,15 @@ const ProductDetails = () => {
               type="number"
               fullWidth
               value={formData.price}
+              onChange={handleFormChange}
+            />
+            <TextField
+              margin="normal"
+              label="stock"
+              name="stock"
+              type="number"
+              fullWidth
+              value={formData.stock}
               onChange={handleFormChange}
             />
             <TextField
