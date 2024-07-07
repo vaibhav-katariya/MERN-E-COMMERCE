@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { FaStar, FaStarHalf } from "react-icons/fa";
 import Rating from "@mui/material/Rating";
 import {
   Box,
@@ -12,6 +11,7 @@ import {
   DialogActions,
   TextField,
   Button,
+  Avatar,
 } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Skeleton from "@mui/material/Skeleton";
@@ -24,6 +24,7 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true);
   const productImageListLoading = new Array(4).fill(null);
   const [activeImage, setActiveImage] = useState("");
+  const [reviews, setReviews] = useState([]);
   const [zoomImageCoordinate, setZoomImageCoordinate] = useState({
     x: 0,
     y: 0,
@@ -31,6 +32,11 @@ const ProductDetails = () => {
   const [zoomImage, setZoomImage] = useState(false);
   const [categoryData, setCategoryData] = useState([]);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
+  const [openReviewModal, setOpenReviewModal] = useState(false);
+  const [reviewData, setReviewData] = useState({
+    rating: 0,
+    comment: "",
+  });
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -63,6 +69,8 @@ const ProductDetails = () => {
         stock: product.stock,
       });
 
+      fetchReviews(product._id);
+
       // Fetch products by category
       if (product.category) {
         findProductByCategory(product.category);
@@ -70,6 +78,16 @@ const ProductDetails = () => {
     } catch (error) {
       console.error("Error fetching product:", error);
       setLoading(false);
+    }
+  };
+
+
+  const fetchReviews = async (productId) => {
+    try {
+      const response = await axios.get(`/api/v1/product/getProductReviews/${productId}`);
+      setReviews(response.data.data);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
     }
   };
 
@@ -159,6 +177,20 @@ const ProductDetails = () => {
       findProduct();
     } catch (error) {
       console.log(error.message);
+    }
+  };
+
+  const handleAddReview = async () => {
+    try {
+      const response = await axios.post(
+        `/api/v1/product/createReviews/${data?._id}`,
+        reviewData
+      );
+      console.log(response.data.message);
+      setOpenReviewModal(false);
+      findProduct()
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -278,6 +310,13 @@ const ProductDetails = () => {
                 </p>
                 <p>{data?.description}</p>
               </div>
+              <span className="text-lg font-semibold  w-full">
+                {data?.stock > 0 ? (
+                  <div className="text-green-800">In Stock</div>
+                ) : (
+                  <div className="text-red-800">Out of Stock</div>
+                )}
+              </span>
               {user?._id === data.owner?._id ? (
                 <div className="flex items-center gap-3 my-2">
                   <button
@@ -294,7 +333,7 @@ const ProductDetails = () => {
                   </button>
                 </div>
               ) : (
-                <div className="flex items-center gap-3 my-2">
+                <div className="flex flex-wrap items-center gap-3 my-2">
                   <button
                     className="border-2 border-zinc-600 rounded px-3 py-1 min-w-[120px] text-zinc-900 font-medium "
                     onClick={(e) => handleBuyProduct(e, data?._id)}
@@ -306,6 +345,12 @@ const ProductDetails = () => {
                     onClick={(e) => handleAddToCart(e, data)}
                   >
                     Add To Cart
+                  </button>
+                  <button
+                    className="rounded px-3 py-1 min-w-[120px] font-medium text-white bg-zinc-600  hover:bg-zinc-900"
+                    onClick={() => setOpenReviewModal(true)}
+                  >
+                    Add Review
                   </button>
                 </div>
               )}
@@ -377,6 +422,66 @@ const ProductDetails = () => {
           )}
         </Grid>
       </div>
+
+      <div className="my-5 md:my-8 p-2 md:p-4">
+        <h2 className="text-xl md:text-2xl font-bold text-primary-dark capitalize">
+          Reviews
+        </h2>
+        {reviews.length === 0 ? (
+          <Typography>No reviews yet</Typography>
+        ) : (
+          reviews.map((review) => (
+            <Box key={review._id} mb={2} mt={3}>
+              <Grid container alignItems="center">
+                <Grid item>
+                  <Avatar src={review.user.avatar} alt={review.user.name} />
+                </Grid>
+                <Grid item>
+                  <Typography variant="subtitle1" ml={2}>
+                    {review.user.name}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Rating value={review.rating} readOnly />
+              <Typography variant="body1">{review.comment}</Typography>
+            </Box>
+          ))
+        )}
+      </div>
+
+      {/* review modal */}
+      <Dialog open={openReviewModal} onClose={() => setOpenReviewModal(false)}>
+        <DialogTitle>Add a Review</DialogTitle>
+        <DialogContent>
+          <Rating
+            value={reviewData.rating}
+            onChange={(e, newValue) => {
+              setReviewData((prev) => ({ ...prev, rating: newValue }));
+            }}
+            precision={0.5}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="comment"
+            label="Comment"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={reviewData.comment}
+            onChange={(e) =>
+              setReviewData((prev) => ({
+                ...prev,
+                comment: e.target.value,
+              }))
+            }
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenReviewModal(false)}>Cancel</Button>
+          <Button onClick={handleAddReview}>Submit</Button>
+        </DialogActions>
+      </Dialog>
 
       {/* Update Product Modal */}
       <Dialog
