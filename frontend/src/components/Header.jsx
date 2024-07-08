@@ -3,7 +3,7 @@ import { FaSearch } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { logout } from "../store/userSlice";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link, Link as RouterLink, useNavigate } from "react-router-dom";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Tooltip from "@mui/material/Tooltip";
@@ -164,9 +164,9 @@ const Header = () => {
           )}
         </Menu>
         {user && (
-          <div className="text-3xl">
+          <Link to={"/cart"} className="text-3xl">
             <IoCartSharp />
-          </div>
+          </Link>
         )}
       </div>
     </div>

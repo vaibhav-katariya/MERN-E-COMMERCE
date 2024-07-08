@@ -6,28 +6,41 @@ const cartSlice = createSlice({
     carts: [],
   },
   reducers: {
-    addcart: (state, action) => {
-      state.carts.push(action.payload);
-    },
-    updatecart: (state, action) => {
-      const index = state.carts.findIndex(
-        (cart) => cart.id === action.payload.id
-      );
-      if (index !== -1) {
-        state.carts[index] = action.payload;
+    addcart: (state, { payload }) => {
+      const isExist = state.carts.find((item) => item._id === payload._id);
+
+      if (isExist) {
+        if (isExist.stock > isExist.quantity) {
+          isExist.quantity++;
+        }
+      } else {
+        state.carts.push({
+          quantity: 1,
+          _id: payload._id,
+          title: payload.title,
+          price: payload.price,
+          image: payload.productImages[0],
+          stock: payload.stock,
+          owner: payload.owner,
+          category: payload.category,
+        });
       }
     },
+
     deletecart: (state, action) => {
-      const index = state.carts.findIndex(
-        (cart) => cart.id === action.payload
-      );
-      if (index !== -1) {
-        state.carts.splice(index, 1);
+      state.carts = state.carts.filter((item) => item._id !== action.payload);
+    },
+
+    decrease: (state, action) => {
+      const cartItem = state.carts.find((item) => item._id === action.payload);
+      if (cartItem.quantity > 1) {
+        cartItem.quantity--;
+      } else {
+        state.carts = state.carts.filter((item) => item._id !== action.payload);
       }
     },
   },
 });
 
-export const { setcarts, addcart, updatecart, deletecart } =
-cartSlice.actions;
+export const { addcart, deletecart, decrease } = cartSlice.actions;
 export default cartSlice.reducer;

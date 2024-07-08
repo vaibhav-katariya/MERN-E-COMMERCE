@@ -12,10 +12,13 @@ import {
   TextField,
   Button,
   Avatar,
+  IconButton,
 } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Skeleton from "@mui/material/Skeleton";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import DeleteIcon from '@mui/icons-material/Delete';
+import { addcart } from "../store/cartSlice";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -46,6 +49,7 @@ const ProductDetails = () => {
   });
 
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   const options = {
     size: "large",
@@ -134,7 +138,7 @@ const ProductDetails = () => {
   const handleAddToCart = (e, product) => {
     e.preventDefault();
     try {
-      console.log(product);
+      dispatch(addcart(product))
     } catch (error) {
       console.log(error.message);
     }
@@ -191,6 +195,16 @@ const ProductDetails = () => {
       findProduct()
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handleDeleteReview = async (reviewId) => {
+    try {
+      const response = await axios.delete(`/api/v1/product/deleteProductReview/${id}/${reviewId}`);
+      console.log(response.data.message);
+      setReviews(reviews.filter(review => review._id !== reviewId));
+    } catch (error) {
+      console.error("Error deleting review:", error);
     }
   };
 
@@ -431,7 +445,7 @@ const ProductDetails = () => {
           <Typography>No reviews yet</Typography>
         ) : (
           reviews.map((review) => (
-            <Box key={review._id} mb={2} mt={3}>
+            <Box key={review._id} mb={2}>
               <Grid container alignItems="center">
                 <Grid item>
                   <Avatar src={review.user.avatar} alt={review.user.name} />
@@ -441,6 +455,13 @@ const ProductDetails = () => {
                     {review.user.name}
                   </Typography>
                 </Grid>
+                {user?._id === review.user._id && (
+                  <Grid item>
+                    <IconButton onClick={() => handleDeleteReview(review._id)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Grid>
+                )}
               </Grid>
               <Rating value={review.rating} readOnly />
               <Typography variant="body1">{review.comment}</Typography>
