@@ -1,9 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const calculateTotalAmount = (carts) => {
+  return carts.reduce((total, item) => total + item.price * item.quantity, 0);
+};
+
 const cartSlice = createSlice({
   name: "cart",
   initialState: {
     carts: [],
+    TotalAmount: 0,
   },
   reducers: {
     addcart: (state, { payload }) => {
@@ -25,10 +30,14 @@ const cartSlice = createSlice({
           category: payload.category,
         });
       }
+
+      state.TotalAmount = calculateTotalAmount(state.carts);
     },
 
     deletecart: (state, action) => {
       state.carts = state.carts.filter((item) => item._id !== action.payload);
+
+      state.TotalAmount = calculateTotalAmount(state.carts);
     },
 
     decrease: (state, action) => {
@@ -38,6 +47,8 @@ const cartSlice = createSlice({
       } else {
         state.carts = state.carts.filter((item) => item._id !== action.payload);
       }
+
+      state.TotalAmount = calculateTotalAmount(state.carts);
     },
   },
 });

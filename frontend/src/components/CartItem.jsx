@@ -18,8 +18,8 @@ const CartItem = ({ item }) => {
     dispatch(decrease(id));
   };
   return (
-    <div className="flex justify-center my-2">
-      <div className="rounded-3xl items-center gap-2 border-2 border-gray-200 p-4 lg:p-8 grid grid-cols-12 mb-8 max-lg:max-w-lg max-lg:mx-auto w-[70%]">
+    <div className="mx-3 md:mx-0 flex justify-center my-2">
+      <div className=" rounded-3xl items-center gap-2 border-2 border-gray-200 p-4 lg:p-8 grid grid-cols-12 mb-8 max-lg:max-w-lg max-lg:mx-auto md:w-[70%]">
         <Link
           to={`/productDetails/${item._id}`}
           className="col-span-2 lg:col-span-1 img box"
@@ -114,7 +114,7 @@ const CartItem = ({ item }) => {
                 </svg>
               </button>
             </div>
-            <h6 className="text-indigo-600 font-manrope font-bold text-2xl leading-9 text-right">
+            <h6 className="text-zinc-600 font-manrope font-bold text-2xl leading-9 text-right">
               ${item.price * item.quantity}
             </h6>
           </div>

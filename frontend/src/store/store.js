@@ -12,6 +12,7 @@ import {
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 import userReducer from "./userSlice";
 import cartReducer from "./cartSlice";
+import shippingReducer from "./shippingInfoSlice";
 
 // Configuration for redux-persist
 const persistConfig = {
@@ -23,6 +24,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   user: userReducer,
   cart: cartReducer,
+  shipping: shippingReducer,
 });
 
 // Create a persisted reducer

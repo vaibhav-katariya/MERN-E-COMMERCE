@@ -27,6 +27,8 @@ import ProtectedRoute from "./helpers/ProtectedRoute.jsx";
 import Alluser from "./components/Alluser.jsx";
 import ProtectedAdmin from "./helpers/ProtectedAdmin.jsx";
 import SearchProducts from "./components/SearchProducts.jsx";
+import Shipping from "./pages/Shipping.jsx";
+import ConfirmOrder from "./pages/ConfirmOrder.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -108,6 +110,22 @@ const router = createBrowserRouter(
         element={
           <ProtectedRoute>
             <Cart />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="shipping"
+        element={
+          <ProtectedRoute>
+            <Shipping />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="confirm-order"
+        element={
+          <ProtectedRoute>
+            <ConfirmOrder />
           </ProtectedRoute>
         }
       />
