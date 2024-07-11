@@ -32,6 +32,7 @@ import ConfirmOrder from "./pages/ConfirmOrder.jsx";
 import Payment from "./pages/Payment.jsx";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import PaymentSuccesss from "./pages/PaymentSuccesss.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -141,6 +142,15 @@ const router = createBrowserRouter(
               <Payment />
             </ProtectedRoute>
           </Elements>
+        }
+      />
+
+      <Route
+        path="success-order"
+        element={
+          <ProtectedRoute>
+            <PaymentSuccesss />
+          </ProtectedRoute>
         }
       />
     </Route>

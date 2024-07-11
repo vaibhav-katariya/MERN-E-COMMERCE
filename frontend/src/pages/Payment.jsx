@@ -12,7 +12,9 @@ import EventIcon from "@mui/icons-material/Event";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { useNavigate } from "react-router";
 const Payment = () => {
+  const navigate = useNavigate();
   const orderInfo = JSON.parse(sessionStorage.getItem("orderInfo"));
   const stripe = useStripe();
   const elements = useElements();
@@ -76,6 +78,8 @@ const Payment = () => {
           };
 
           await axios.post("/api/v1/order/create-oreder", order);
+
+          navigate("/success-order");
 
           payBtn.current.disabled = false;
         } else {
