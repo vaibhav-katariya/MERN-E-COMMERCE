@@ -1,13 +1,14 @@
 import React from "react";
 import CheckoutSteps from "../components/CheckOutStape";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
 
 const ConfirmOrder = () => {
   const shippingInfo = useSelector((state) => state.shipping.shippingInfo);
   const { carts, TotalAmount } = useSelector((state) => state.cart);
   const user = useSelector((state) => state.user.user);
+  const navigate = useNavigate()
 
   const shippingCharges = TotalAmount > 1000 ? 0 : 200;
 
@@ -19,13 +20,14 @@ const ConfirmOrder = () => {
 
   const proceedToPayment = () => {
     const data = {
-      subtotal,
+      TotalAmount,
       shippingCharges,
       tax,
       totalPrice,
     };
 
     sessionStorage.setItem("orderInfo", JSON.stringify(data));
+    navigate("/payment")
   };
 
   return (
@@ -97,6 +99,7 @@ const ConfirmOrder = () => {
               <div className="h-[12rem] overflow-y-auto scrollbar-none">
                 {carts?.map((item, index) => (
                   <Link
+                  key={item._id}
                     to={`/productDetails/${item._id}`}
                     className="grid grid-cols-3 w-full border-[2px] my-2 p-2 rounded-2xl gap-8"
                   >

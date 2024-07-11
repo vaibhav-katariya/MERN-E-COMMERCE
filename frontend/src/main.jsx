@@ -29,6 +29,9 @@ import ProtectedAdmin from "./helpers/ProtectedAdmin.jsx";
 import SearchProducts from "./components/SearchProducts.jsx";
 import Shipping from "./pages/Shipping.jsx";
 import ConfirmOrder from "./pages/ConfirmOrder.jsx";
+import Payment from "./pages/Payment.jsx";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -127,6 +130,17 @@ const router = createBrowserRouter(
           <ProtectedRoute>
             <ConfirmOrder />
           </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="payment"
+        element={
+          <Elements stripe={loadStripe(import.meta.env.VITE_STRIPE_API_KEY)}>
+            <ProtectedRoute>
+              <Payment />
+            </ProtectedRoute>
+          </Elements>
         }
       />
     </Route>
