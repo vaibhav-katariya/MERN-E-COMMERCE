@@ -5,6 +5,7 @@ import axios from "axios";
 import Typography from "@mui/material/Typography";
 import Slider from "@mui/material/Slider";
 import { Box, Pagination, Stack } from "@mui/material";
+import { addcart } from "../store/cartSlice";
 
 const VerticalCardProduct = ({ keyword, heading }) => {
   const [data, setData] = useState([]);
@@ -16,13 +17,14 @@ const VerticalCardProduct = ({ keyword, heading }) => {
   const [filterProduct, setFilterProduct] = useState(1);
   const [resultPerPage, setResultPerPage] = useState(6);
   const [productsCount, setProductsCount] = useState(1);
+  const dispatch = useDispatch();
 
   const handleAddToCart = async (e, product) => {
     e.preventDefault();
     try {
-      console.log(product);
+      dispatch(addcart(product));
     } catch (error) {
-      console.error(error.message);
+      console.log(error.message);
     }
   };
 

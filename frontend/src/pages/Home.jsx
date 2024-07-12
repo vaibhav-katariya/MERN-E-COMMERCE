@@ -3,6 +3,8 @@ import GetCategoryWiseOneProduct from "../components/GetCategoryWiseOneProduct";
 import { Box, Pagination, Stack } from "@mui/material";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { addcart } from "../store/cartSlice";
+import { useDispatch } from "react-redux";
 
 const Home = () => {
   const [data, setData] = useState([]);
@@ -11,6 +13,7 @@ const Home = () => {
   const [resultPerPage, setResultPerPage] = useState(6);
   const [productsCount, setProductsCount] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
+  const dispatch = useDispatch()
 
   const totalPages = Math.ceil(productsCount / resultPerPage);
 
@@ -18,7 +21,6 @@ const Home = () => {
     const res = await axios.get(
       `/api/v1/product/getProduct?page=${currentPage}`
     );
-    console.log(res.data);
     setResultPerPage(res.data.resultPerPage);
     setProductsCount(res.data.productCount);
     setData(res.data.products);
@@ -27,9 +29,9 @@ const Home = () => {
   const handleAddToCart = async (e, product) => {
     e.preventDefault();
     try {
-      console.log(product);
+      dispatch(addcart(product))
     } catch (error) {
-      console.error(error.message);
+      console.log(error.message);
     }
   };
 
