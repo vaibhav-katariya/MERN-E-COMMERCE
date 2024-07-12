@@ -33,6 +33,8 @@ import Payment from "./pages/Payment.jsx";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import PaymentSuccesss from "./pages/PaymentSuccesss.jsx";
+import MyOrders from "./components/MyOrders.jsx";
+import OrderDetails from "./components/OrderDetails.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -81,6 +83,14 @@ const router = createBrowserRouter(
             </ProtectedAdmin>
           }
         />
+        <Route
+          path="myOrders"
+          element={
+            <ProtectedRoute>
+              <MyOrders />
+            </ProtectedRoute>
+          }
+        />
       </Route>
       <Route
         path="setting"
@@ -108,6 +118,7 @@ const router = createBrowserRouter(
         />
       </Route>
       <Route path="productDetails/:id" element={<ProductDetails />} />
+      <Route path="OrderDetails/:id" element={<OrderDetails />} />
       <Route path="search/:keyword" element={<SearchProducts />} />
       <Route
         path="cart"

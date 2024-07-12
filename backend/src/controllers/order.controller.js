@@ -37,7 +37,15 @@ const getSingleOrder = async (req, res) => {
     if (!orderId) {
       return res.status(400).json({ success: false, error: "No order ID" });
     }
-    const order = await Order.findById(orderId).populate("user", "name email");
+    const order = await Order.findById(orderId)
+      .populate({
+        path: "user",
+        select: "username email",
+      })
+      .populate({
+        path: "orderItems",
+        populate: { path: "product" },
+      });
     if (!order)
       return res
         .status(404)

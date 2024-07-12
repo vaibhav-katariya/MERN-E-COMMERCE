@@ -45,6 +45,13 @@ const Profile = () => {
             </Link>
           </div>
         )}
+        <div className="my-5">
+          <Link to={"myOrders"}>
+            <p className="border-[1px] p-2 my-3 border-zinc-300 hover:bg-zinc-100">
+              My Orders
+            </p>
+          </Link>
+        </div>
       </div>
       <div className="h-full w-full">
         <ProfileLayout />

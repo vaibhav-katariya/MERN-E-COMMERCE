@@ -2,7 +2,6 @@ import React from "react";
 import CheckoutSteps from "../components/CheckOutStape";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { Typography } from "@mui/material";
 
 const ConfirmOrder = () => {
   const shippingInfo = useSelector((state) => state.shipping.shippingInfo);
