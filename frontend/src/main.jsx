@@ -35,6 +35,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import PaymentSuccesss from "./pages/PaymentSuccesss.jsx";
 import MyOrders from "./components/MyOrders.jsx";
 import OrderDetails from "./components/OrderDetails.jsx";
+import AllOrders from "./components/AllOrders.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -80,6 +81,14 @@ const router = createBrowserRouter(
           element={
             <ProtectedAdmin>
               <Alluser />
+            </ProtectedAdmin>
+          }
+        />
+        <Route
+          path="allorders"
+          element={
+            <ProtectedAdmin>
+              <AllOrders />
             </ProtectedAdmin>
           }
         />

@@ -74,7 +74,15 @@ const getAllOrder = async (req, res) => {
         error: "You have not access to see all orders",
       });
     }
-    const orders = await Order.find();
+    const orders = await Order.find()
+      .populate({
+        path: "user",
+        select: "username email",
+      })
+      .populate({
+        path: "orderItems",
+        populate: { path: "product" },
+      });
     res.status(200).json({ success: true, orders });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });

@@ -19,7 +19,7 @@ const Profile = () => {
           </Link>
         </div>
         {(user?.role === "saler" || user?.role === "admin") && (
-          <div>
+          <>
             <div className="my-5">
               <Link to={"uploadProduct"}>
                 <p className="border-[1px] p-2 my-3 border-zinc-300 hover:bg-zinc-100">
@@ -34,16 +34,25 @@ const Profile = () => {
                 </p>
               </Link>
             </div>
-          </div>
+          </>
         )}
         {user.role === "admin" && (
-          <div className="my-5">
-            <Link to={"alluser"}>
-              <p className="border-[1px] p-2 my-3 border-zinc-300 hover:bg-zinc-100">
-                All User
-              </p>
-            </Link>
-          </div>
+          <>
+            <div className="my-5">
+              <Link to={"alluser"}>
+                <p className="border-[1px] p-2 my-3 border-zinc-300 hover:bg-zinc-100">
+                  All User
+                </p>
+              </Link>
+            </div>
+            <div className="my-5">
+              <Link to={"allorders"}>
+                <p className="border-[1px] p-2 my-3 border-zinc-300 hover:bg-zinc-100">
+                  All Orders
+                </p>
+              </Link>
+            </div>
+          </>
         )}
         <div className="my-5">
           <Link to={"myOrders"}>
