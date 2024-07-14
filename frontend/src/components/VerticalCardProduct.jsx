@@ -135,15 +135,19 @@ const VerticalCardProduct = ({ keyword, heading }) => {
                           {product?.fakePrice}
                         </p>
                       </div>
-                      <button
-                        className="font-semibold text-md bg-zinc-600 hover:bg-zinc-900 text-white px-3 py-[0.4rem] rounded-lg transition-all"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleAddToCart(e, product);
-                        }}
-                      >
-                        Add to Cart
-                      </button>
+                      {product.stock > 0 ? (
+                        <button
+                          className="font-semibold text-md bg-zinc-600 hover:bg-zinc-900 text-white px-3 py-[0.4rem] rounded-lg transition-all"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleAddToCart(e, product);
+                          }}
+                        >
+                          Add to Cart
+                        </button>
+                      ) : (
+                        <h3 className="text-red-900 font-semibold text-xl">out of stock</h3>
+                      )}
                     </div>
                   </Link>
 

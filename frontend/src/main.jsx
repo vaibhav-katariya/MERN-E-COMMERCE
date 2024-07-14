@@ -36,6 +36,7 @@ import PaymentSuccesss from "./pages/PaymentSuccesss.jsx";
 import MyOrders from "./components/MyOrders.jsx";
 import OrderDetails from "./components/OrderDetails.jsx";
 import AllOrders from "./components/AllOrders.jsx";
+import ProccessOrder from "./components/ProccessOrder.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -101,6 +102,9 @@ const router = createBrowserRouter(
           }
         />
       </Route>
+
+      {/* setting */}
+
       <Route
         path="setting"
         element={
@@ -126,6 +130,14 @@ const router = createBrowserRouter(
           }
         />
       </Route>
+      <Route
+        path="order/:id"
+        element={
+          <ProtectedAdmin>
+            <ProccessOrder />
+          </ProtectedAdmin>
+        }
+      />
       <Route path="productDetails/:id" element={<ProductDetails />} />
       <Route path="OrderDetails/:id" element={<OrderDetails />} />
       <Route path="search/:keyword" element={<SearchProducts />} />

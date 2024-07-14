@@ -10,7 +10,7 @@ const PaymentSuccesss = () => {
         Your Order has been Placed successfully{" "}
       </h1>
       <Link
-        to={""}
+        to={"/profile/myOrders"}
         className="py-2 px-3 bg-zinc-700 text-lg text-white rounded-lg"
       >
         View Orders

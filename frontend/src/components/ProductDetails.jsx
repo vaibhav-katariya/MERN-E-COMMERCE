@@ -17,7 +17,7 @@ import {
 import Typography from "@mui/material/Typography";
 import Skeleton from "@mui/material/Skeleton";
 import { useDispatch, useSelector } from "react-redux";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 import { addcart } from "../store/cartSlice";
 
 const ProductDetails = () => {
@@ -49,7 +49,7 @@ const ProductDetails = () => {
   });
 
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const options = {
     size: "large",
@@ -85,10 +85,11 @@ const ProductDetails = () => {
     }
   };
 
-
   const fetchReviews = async (productId) => {
     try {
-      const response = await axios.get(`/api/v1/product/getProductReviews/${productId}`);
+      const response = await axios.get(
+        `/api/v1/product/getProductReviews/${productId}`
+      );
       setReviews(response.data.data);
     } catch (error) {
       console.error("Error fetching reviews:", error);
@@ -138,7 +139,7 @@ const ProductDetails = () => {
   const handleAddToCart = (e, product) => {
     e.preventDefault();
     try {
-      dispatch(addcart(product))
+      dispatch(addcart(product));
     } catch (error) {
       console.log(error.message);
     }
@@ -192,7 +193,7 @@ const ProductDetails = () => {
       );
       console.log(response.data.message);
       setOpenReviewModal(false);
-      findProduct()
+      findProduct();
     } catch (error) {
       console.log(error);
     }
@@ -200,9 +201,11 @@ const ProductDetails = () => {
 
   const handleDeleteReview = async (reviewId) => {
     try {
-      const response = await axios.delete(`/api/v1/product/deleteProductReview/${id}/${reviewId}`);
+      const response = await axios.delete(
+        `/api/v1/product/deleteProductReview/${id}/${reviewId}`
+      );
       console.log(response.data.message);
-      setReviews(reviews.filter(review => review._id !== reviewId));
+      setReviews(reviews.filter((review) => review._id !== reviewId));
     } catch (error) {
       console.error("Error deleting review:", error);
     }
@@ -301,7 +304,7 @@ const ProductDetails = () => {
               <h2 className="text-2xl lg:text-4xl font-medium">
                 {data?.description}
               </h2>
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 z-[-1]">
                 <Rating {...options} />
                 <span className="detailsBlock-2-span">
                   {" "}
@@ -348,18 +351,14 @@ const ProductDetails = () => {
                 </div>
               ) : (
                 <div className="flex flex-wrap items-center gap-3 my-2">
-                  <button
-                    className="border-2 border-zinc-600 rounded px-3 py-1 min-w-[120px] text-zinc-900 font-medium "
-                    onClick={(e) => handleBuyProduct(e, data?._id)}
-                  >
-                    Buy
-                  </button>
-                  <button
-                    className="rounded px-3 py-1 min-w-[120px] font-medium text-white bg-zinc-600  hover:bg-zinc-900"
-                    onClick={(e) => handleAddToCart(e, data)}
-                  >
-                    Add To Cart
-                  </button>
+                  {data?.stock > 0 && (
+                    <button
+                      className="rounded px-3 py-1 min-w-[120px] font-medium text-white bg-zinc-600  hover:bg-zinc-900"
+                      onClick={(e) => handleAddToCart(e, data)}
+                    >
+                      Add To Cart
+                    </button>
+                  )}
                   <button
                     className="rounded px-3 py-1 min-w-[120px] font-medium text-white bg-zinc-600  hover:bg-zinc-900"
                     onClick={() => setOpenReviewModal(true)}

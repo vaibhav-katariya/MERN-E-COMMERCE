@@ -51,7 +51,7 @@ const Home = () => {
           {data.length < 0
             ? loadingList.map((_, index) => (
                 <div
-                  key={index}
+                  key={data._id}
                   className="w-full min-w-[170px] md:min-w-[300px] max-w-[180px] md:max-w-[310px] bg-white rounded-lg shadow-lg overflow-hidden"
                 >
                   <div className="bg-slate-200 h-48 p-4 flex justify-center items-center animate-pulse"></div>
@@ -69,7 +69,7 @@ const Home = () => {
             : data.map((product, index) => (
                 <div className="flex justify-between">
                   <Link
-                    key={index}
+                    key={product._id}
                     to={`/productDetails/${product?._id}`}
                     className=" w-[170px] md:w-[290px] bg-white rounded-lg shadow-lg transition-transform  overflow-hidden"
                   >
@@ -92,7 +92,8 @@ const Home = () => {
                           {product?.fakePrice}
                         </p>
                       </div>
-                      <button
+                      {
+                        product?.stock < 0 ? <button
                         className="font-semibold text-md bg-zinc-600 hover:bg-zinc-900 text-white px-3 py-[0.4rem] rounded-lg transition-all"
                         onClick={(e) => {
                           e.preventDefault();
@@ -100,7 +101,8 @@ const Home = () => {
                         }}
                       >
                         Add to Cart
-                      </button>
+                      </button> : <h3 className="text-red-900 font-semibold text-xl">out of stock</h3>
+                      }
                     </div>
                   </Link>
 
