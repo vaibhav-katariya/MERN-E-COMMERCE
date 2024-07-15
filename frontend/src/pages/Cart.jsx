@@ -34,7 +34,17 @@ const Cart = () => {
           </div>
         </div>
       ) : (
-        "NO ITEMS IN THE CART"
+        <div className="h-[80vh] flex justify-center items-center flex-col w-full">
+          <h1 className="mb-5 text-2xl md:text-4xl font-semibold text-center">
+            Your cart has been empty
+          </h1>
+          <Link
+            to={"/"}
+            className="py-2 px-3 bg-zinc-700 text-lg text-white rounded-lg"
+          >
+            View Product
+          </Link>
+        </div>
       )}
     </>
   );

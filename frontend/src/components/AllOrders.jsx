@@ -9,7 +9,7 @@ import { Button } from "@mui/material";
 
 const AllOrders = () => {
   const user = useSelector((state) => state.user.user);
-  const [allOrders, setAllOrders] = useState();
+  const [allOrders, setAllOrders] = useState([]);
 
   const deleteOrderHandler = async (id) => {
     try {
@@ -28,7 +28,9 @@ const AllOrders = () => {
       minWidth: 150,
       flex: 0.5,
       cellClassName: (params) => {
-        return params.row.status === "Delivered" ? "greenColor" : "redColor";
+        return params.row.status === "Delivered"
+          ? "text-green-800"
+          : "text-red-800";
       },
     },
     {
@@ -91,7 +93,21 @@ const AllOrders = () => {
 
   return (
     <Fragment>
-      <h2 className="my-5 text-2xl mx-6">All Orders</h2>
+      <div className="my-5 mx-5 flex flex-wrap gap-5 items-center">
+        <h2 className="text-2xl">All Orders : ({allOrders.length})</h2>
+        <p>
+          Shipped : (
+          {allOrders.filter((i) => i.orderStatus === "Shipped").length})
+        </p>
+        <p>
+          Delivered : (
+          {allOrders.filter((i) => i.orderStatus === "Delivered").length})
+        </p>
+        <p>
+          Processing : (
+          {allOrders.filter((i) => i.orderStatus === "Processing").length})
+        </p>
+      </div>
       <div className="px-5">
         <DataGrid
           rows={rows}

@@ -93,7 +93,7 @@ const Home = () => {
                         </p>
                       </div>
                       {
-                        product?.stock < 0 ? <button
+                        product?.stock > 0 ? <button
                         className="font-semibold text-md bg-zinc-600 hover:bg-zinc-900 text-white px-3 py-[0.4rem] rounded-lg transition-all"
                         onClick={(e) => {
                           e.preventDefault();

@@ -334,7 +334,7 @@ const ProductDetails = () => {
                   <div className="text-red-800">Out of Stock</div>
                 )}
               </span>
-              {user?._id === data.owner?._id ? (
+              {user?._id === data?.owner?._id ? (
                 <div className="flex items-center gap-3 my-2">
                   <button
                     className="border-2 border-zinc-600  rounded px-3 py-1 min-w-[120px] text-zinc-900 font-medium "

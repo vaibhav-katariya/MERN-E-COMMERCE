@@ -18,7 +18,7 @@ const Profile = () => {
             </p>
           </Link>
         </div>
-        {(user?.role === "saler" || user?.role === "admin") && (
+        {(user?.role === "seller" || user?.role === "admin") && (
           <>
             <div className="my-5">
               <Link to={"uploadProduct"}>

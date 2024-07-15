@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["user", "admin", "saler"],
+      enum: ["user", "admin", "seller"],
       default: "user",
     },
     refreshToken: {

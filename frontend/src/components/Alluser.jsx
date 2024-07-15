@@ -1,5 +1,4 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { DataGrid } from "@mui/x-data-grid";
@@ -11,7 +10,6 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  TextField,
   MenuItem,
   Select,
   FormControl,
@@ -20,7 +18,6 @@ import {
 
 const Alluser = () => {
   const [allUser, setAllUser] = useState([]);
-  const [updateRole, setUpdateRole] = useState([]);
   const [open, setOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
 
@@ -28,7 +25,6 @@ const Alluser = () => {
     try {
       const res = await axios.get("/api/v1/user/alluser");
       setAllUser(res.data.user);
-      setUpdateRole(res.data.user);
     } catch (error) {
       console.log("error while fetching all users", error);
     }
@@ -104,7 +100,12 @@ const Alluser = () => {
 
   return (
     <Fragment>
-      <h2 className="my-5 text-2xl mx-6">All Users</h2>
+      <div className="my-5 mx-6 flex gap-5 items-center flex-wrap">
+        <h2 className=" text-2xl">All Users ({allUser.length})</h2>
+        <p>Admin : {allUser.filter((i) => i.role === 'admin').length}</p>
+        <p>User : {allUser.filter((i) => i.role === 'user').length}</p>
+        <p>Saller : {allUser.filter((i) => i.role === 'seller').length}</p>
+      </div>
       <div className="px-5">
         <DataGrid
           rows={rows}
