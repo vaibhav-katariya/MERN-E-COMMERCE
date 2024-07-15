@@ -146,7 +146,9 @@ const VerticalCardProduct = ({ keyword, heading }) => {
                           Add to Cart
                         </button>
                       ) : (
-                        <h3 className="text-red-900 font-semibold text-xl">out of stock</h3>
+                        <h3 className="text-red-900 font-semibold text-xl">
+                          out of stock
+                        </h3>
                       )}
                     </div>
                   </Link>
