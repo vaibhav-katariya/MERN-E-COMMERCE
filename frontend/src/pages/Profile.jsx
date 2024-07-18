@@ -2,11 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import ProfileLayout from "../components/ProfileLayout";
 import { useSelector } from "react-redux";
+import MetaData from "../helpers/MetaData";
 
 const Profile = () => {
   const user = useSelector((state) => state.user.user);
   return (
     <div className="min-h-[87vh] w-[100%] font-semibold my-5 md:flex md:px-8 px-2 overflow-hidden">
+      <MetaData title="Shop-Trend-Profile" />
       <div className="md:w-1/6  md:border-r-[1px] border-zinc-300 p-2">
         <h1 className="text-2xl border-b-[1px] pb-2 border-zinc-400">
           Account

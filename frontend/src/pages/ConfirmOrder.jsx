@@ -2,6 +2,7 @@ import React from "react";
 import CheckoutSteps from "../components/CheckOutStape";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import MetaData from "../helpers/MetaData";
 
 const ConfirmOrder = () => {
   const shippingInfo = useSelector((state) => state.shipping.shippingInfo);
@@ -31,6 +32,7 @@ const ConfirmOrder = () => {
 
   return (
     <div className="my-5 mx-2">
+      <MetaData title="Shop-Trend-Confirm-Order" />
       <CheckoutSteps activeStep={1} />
 
       <section className="py-16 relative">

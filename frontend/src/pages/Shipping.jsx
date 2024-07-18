@@ -10,6 +10,7 @@ import TransferWithinAStationIcon from "@mui/icons-material/TransferWithinAStati
 import { useDispatch, useSelector } from "react-redux";
 import { setShippingInfo } from "../store/shippingInfoSlice";
 import { useNavigate } from "react-router";
+import MetaData from "../helpers/MetaData";
 
 const Shipping = () => {
   const dispatch = useDispatch();
@@ -38,6 +39,7 @@ const Shipping = () => {
 
   return (
     <div className="my-5">
+      <MetaData title="Shop-Trend-Shipping" />
       <CheckoutSteps activeStep={0} />
 
       <div className="flex justify-center items-center p-5">

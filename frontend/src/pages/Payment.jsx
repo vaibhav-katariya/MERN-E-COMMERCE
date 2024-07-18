@@ -13,6 +13,7 @@ import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import MetaData from "../helpers/MetaData";
 const Payment = () => {
   const navigate = useNavigate();
   const orderInfo = JSON.parse(sessionStorage.getItem("orderInfo"));
@@ -94,6 +95,7 @@ const Payment = () => {
 
   return (
     <div className="my-5">
+      <MetaData title="Shop-Trend-Payment" />
       <CheckoutSteps activeStep={2} />
 
       <div className="flex justify-center items-center p-5">

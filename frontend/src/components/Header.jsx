@@ -15,13 +15,16 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { IoCartSharp } from "react-icons/io5";
-
+import Badge from "@mui/material/Badge";
+import { styled } from "@mui/material/styles";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import Logo from "../assets/images.png"
 const Header = () => {
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [keyword, setKeyword] = React.useState("");
+  const cartItems = useSelector((state) => state.cart.carts);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -49,10 +52,21 @@ const Header = () => {
     }
   };
 
+  const StyledBadge = styled(Badge)(({ theme }) => ({
+    "& .MuiBadge-badge": {
+      right: -3,
+      top: 13,
+      border: `2px solid ${theme.palette.background.paper}`,
+      padding: "0 4px",
+      backgroundColor: " rgb(63 63 70)",
+      color: "white",
+    },
+  }));
+
   return (
     <div className="overflow-hidden h-14 shadow-lg border-b-2 flex items-center justify-between md:px-8 px-2">
       <RouterLink to={"/"} style={{ textDecoration: "none", color: "inherit" }}>
-        <Typography variant="h6">MY STORE</Typography>
+        <img className="h-14 w-30" src={Logo} alt="img" />
       </RouterLink>
       <div className="h-[1.5rem] flex items-center">
         <input
@@ -61,7 +75,7 @@ const Header = () => {
           type="text"
           name="search"
           placeholder="Search Products....."
-          className="px-2 rounded-ss-lg border-e-0 rounded-es-lg outline-none py-1 border-[1px] border-zinc-700 w-32 md:w-full ms-2"
+          className="px-2 rounded-ss-lg border-e-0 rounded-es-lg outline-none py-1 border-[1px] border-zinc-700 w-32 md:w-[20rem] ms-2"
         />
         <button
           onClick={handleSearch}
@@ -71,7 +85,9 @@ const Header = () => {
         </button>
       </div>
       <div className="flex items-center gap-2">
-        <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
+        <Box
+          sx={{ display: "flex", alignItems: "center", textAlign: "center" }}
+        >
           <Tooltip title="Account">
             <IconButton
               onClick={handleClick}
@@ -131,7 +147,10 @@ const Header = () => {
         >
           {user ? (
             <>
-              <RouterLink to={"/profile/userProfile"} style={{ textDecoration: "none", color: "inherit" }}>
+              <RouterLink
+                to={"/profile/userProfile"}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
                 <MenuItem onClick={handleClose}>
                   <Box display="flex" alignItems="center" gap={2}>
                     <Avatar src={user.avatar} alt={user.username} />
@@ -140,7 +159,10 @@ const Header = () => {
                 </MenuItem>
               </RouterLink>
               <Divider />
-              <RouterLink to={"/setting/changeUserDetails"} style={{ textDecoration: "none", color: "inherit" }}>
+              <RouterLink
+                to={"/setting/changeUserDetails"}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
                 <MenuItem onClick={handleClose}>
                   <ListItemIcon>
                     <SettingsIcon fontSize="small" />
@@ -157,15 +179,22 @@ const Header = () => {
             </>
           ) : (
             <MenuItem>
-              <RouterLink to={"/login"} style={{ textDecoration: "none", color: "inherit" }}>
+              <RouterLink
+                to={"/login"}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
                 Login
               </RouterLink>
             </MenuItem>
           )}
         </Menu>
         {user && (
-          <Link to={"/cart"} className="text-3xl">
-            <IoCartSharp />
+          <Link to={"/cart"}>
+            <IconButton aria-label="cart">
+              <StyledBadge badgeContent={cartItems ? cartItems.length : 0}>
+                <ShoppingCartIcon style={{ fontSize: 30 }} />
+              </StyledBadge>
+            </IconButton>
           </Link>
         )}
       </div>

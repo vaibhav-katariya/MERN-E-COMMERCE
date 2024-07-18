@@ -2,11 +2,13 @@ import React from "react";
 import CartItem from "../components/CartItem";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import MetaData from "../helpers/MetaData";
 const Cart = () => {
   const { carts, TotalAmount } = useSelector((state) => state.cart);
 
   return (
     <>
+      <MetaData title="Shop-Trend-Cart" />
       {carts?.map((item, index) => (
         <CartItem item={item} key={index} />
       ))}

@@ -1,10 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import SettingLayout from "../components/SettingLayout";
+import MetaData from "../helpers/MetaData";
 
 const Settings = () => {
   return (
     <div className="min-h-[40vh] w-full font-semibold my-5 md:flex px-8">
+      <MetaData title="Shop-Trend-Settings" />
       <div className="md:w-1/6  md:border-r-[1px] border-zinc-300 p-2">
         <h1 className="text-2xl border-b-[1px] pb-2 border-zinc-400">
           Settings

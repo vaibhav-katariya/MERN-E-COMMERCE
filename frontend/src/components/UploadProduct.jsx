@@ -70,7 +70,7 @@ const UploadProduct = () => {
     <div className="h-full w-full text-zinc-800 flex flex-col justify-center items-center overflow-hidden">
       <form
         onSubmit={submitHandler}
-        className="overflow-hidden border-[1px] md:w-1/2 border-zinc-400 md:p-10 rounded-lg p-5"
+        className="overflow-hidden border-[1px] md:w-1/2 border-zinc-400 md:p-10 rounded-lg w-full p-5"
       >
         <h2 className="text-center mb-3 text-2xl text-zinc-400 font-semibold">
           Upload Product
@@ -174,7 +174,7 @@ const UploadProduct = () => {
         </div>
         <button
           type="submit"
-          className="py-2 w-full px-3 rounded-lg text-md text-white font-semibold mt-5 bg-blue-500"
+          className="py-2 w-full px-3 rounded-lg text-md text-white font-semibold mt-5 bg-zinc-600"
         >
           Upload Product
         </button>

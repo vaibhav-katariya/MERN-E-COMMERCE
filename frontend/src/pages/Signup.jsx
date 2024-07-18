@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useRef, useState } from "react";
 import { BsCloudUpload } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
+import MetaData from "../helpers/MetaData"
 const Signup = () => {
   const [data, setData] = useState({
     username: "",
@@ -47,9 +48,10 @@ const Signup = () => {
   };
   return (
     <div className="h-screen w-full text-zinc-800 flex flex-col justify-center items-center">
+      <MetaData title="Shop-Trend-Sign-Up" />
       <form
         onSubmit={submitHandler}
-        className="border-[1px] md:w-1/2 border-zinc-400 md:p-10 rounded-lg p-5"
+        className="border-[1px] md:w-1/2 border-zinc-400 md:p-10 rounded-lg w-[80%] p-5"
       >
         <h2 className="text-center mb-3 text-2xl text-zinc-400 font-semibold">
           Sign up
@@ -121,7 +123,7 @@ const Signup = () => {
         </div>
         <button
           type="submit"
-          className="py-2 w-full px-3 rounded-lg text-md text-white font-semibold mt-5 bg-blue-500"
+          className="py-2 w-full px-3 rounded-lg text-md text-white font-semibold mt-5 bg-zinc-600"
         >
           Creare Account
         </button>

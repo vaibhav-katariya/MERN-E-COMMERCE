@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { login } from "../store/userSlice";
+import MetaData from "../helpers/MetaData";
 const Login = () => {
   const [data, setData] = useState({
     email: "",
@@ -29,12 +30,13 @@ const Login = () => {
       console.log("login error ", error);
     }
   };
-  
+
   return (
-      <div className="h-screen w-full text-zinc-800 flex flex-col justify-center items-center">
+    <div className="h-screen w-full text-zinc-800 flex flex-col justify-center items-center">
+      <MetaData title="Shop-Trend-Sign-In" />
       <form
         onSubmit={submitHandler}
-        className="border-[1px] md:w-1/2 border-zinc-400 md:p-10 rounded-lg p-5"
+        className="border-[1px] md:w-1/2 border-zinc-400 md:p-10 rounded-lg w-[80%] p-5"
       >
         <h2 className="text-center mb-3 text-2xl text-zinc-400 font-semibold">
           Login
@@ -65,7 +67,7 @@ const Login = () => {
         </div>
         <button
           type="submit"
-          className="py-2 w-full px-3 rounded-lg text-md text-white font-semibold mt-5 bg-blue-500"
+          className="py-2 w-full px-3 rounded-lg text-md text-white font-semibold mt-5 bg-zinc-600"
         >
           Login
         </button>
