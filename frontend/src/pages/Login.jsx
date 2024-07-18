@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
@@ -9,6 +9,8 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const [msg, setMsg] = useState();
+  const btnRef = useRef();
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -21,13 +23,17 @@ const Login = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
+      btnRef.current.disabled = true;
       const res = await axios.post("/api/v1/user/login", data);
       if (res.status === 200) {
         dispatch(login(res.data.loginUser));
         navigate("/");
       }
+      btnRef.current.disabled = false;
     } catch (error) {
       console.log("login error ", error);
+      setMsg(error?.response?.data.message);
+      btnRef.current.disabled = false;
     }
   };
 
@@ -67,10 +73,12 @@ const Login = () => {
         </div>
         <button
           type="submit"
+          ref={btnRef}
           className="py-2 w-full px-3 rounded-lg text-md text-white font-semibold mt-5 bg-zinc-600"
         >
           Login
         </button>
+        {msg && <p className="text-center my-2 text-lg text-red-600">{msg}</p>}
         <p className="my-2 text-center">
           Don't have an account?{" "}
           <Link to="/signup" className="text-blue-500 underline">

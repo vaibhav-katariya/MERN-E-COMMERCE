@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { GrFormViewHide } from "react-icons/gr";
 import { BiShowAlt } from "react-icons/bi";
 const UpdatePassword = () => {
@@ -11,14 +11,18 @@ const UpdatePassword = () => {
   const [message, setMessage] = useState("");
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
+  const btnRef = useRef();
 
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
+      btnRef.current.disabled = true;
       const res = await axios.put("/api/v1/user/update-password", data);
       setMessage(res.data.message);
+      btnRef.current.disabled = false;
     } catch (error) {
       setMessage(error.response.data.message);
+      btnRef.current.disabled = false;
     }
   };
 
@@ -90,6 +94,7 @@ const UpdatePassword = () => {
         </div>
         <button
           type="submit"
+          ref={btnRef}
           className="py-2 w-full px-3 rounded-lg text-md text-white font-semibold mt-5 bg-zinc-600"
         >
           Change Password

@@ -16,6 +16,7 @@ const UploadProduct = () => {
   const [imagePreviews, setImagePreviews] = useState([]);
 
   const imageRef = useRef();
+  const btnRef = useRef();
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -32,6 +33,7 @@ const UploadProduct = () => {
     });
 
     try {
+      btnRef.current.disabled = true;
       const res = await axios.post("/api/v1/product/upload", formData);
       if (res.data) {
         setMessage("Product uploaded successfully!");
@@ -44,10 +46,12 @@ const UploadProduct = () => {
         });
         setImages([]);
         setImagePreviews([]);
+        btnRef.current.disabled = false;
       }
     } catch (error) {
       console.log(error);
       setMessage("Failed to upload product");
+      btnRef.current.disabled = false;
     }
   };
 
@@ -174,6 +178,7 @@ const UploadProduct = () => {
         </div>
         <button
           type="submit"
+          ref={btnRef}
           className="py-2 w-full px-3 rounded-lg text-md text-white font-semibold mt-5 bg-zinc-600"
         >
           Upload Product

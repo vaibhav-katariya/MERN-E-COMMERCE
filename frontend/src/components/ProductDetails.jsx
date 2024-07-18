@@ -299,7 +299,7 @@ const ProductDetails = () => {
           ) : (
             <div className="flex flex-col justify-center gap-1">
               <p className="bg-zinc-600 text-white px-3 py-[0.5rem] mb-1 font-semibold rounded-lg inline-block w-fit">
-                {data?.title}
+                {data?.category}
               </p>
               <h2 className="text-2xl lg:text-4xl font-medium">
                 {data?.description}

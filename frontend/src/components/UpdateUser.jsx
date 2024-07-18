@@ -14,6 +14,7 @@ const UpdateUser = () => {
   });
   const [message, setMessage] = useState("");
   const [newAvatar, setNewAvatar] = useState();
+  const btnRef = useRef();
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -27,16 +28,19 @@ const UpdateUser = () => {
     }
 
     try {
+      btnRef.current.disabled = true;
       const res = await axios.put("/api/v1/user/update-user-details", formData);
 
       if (res.data) {
         console.log(res.data.updateUser);
         dispatch(login(res.data.updateUser));
         setMessage("User updated successfully");
+        btnRef.current.disabled = false;
       }
     } catch (error) {
       console.log(error);
       setMessage("Failed to update user details");
+      btnRef.current.disabled = false;
     }
   };
 
@@ -110,6 +114,7 @@ const UpdateUser = () => {
         </div>
         <button
           type="submit"
+          ref={btnRef}
           className="py-2 w-full px-3 rounded-lg text-md text-white font-semibold mt-5 bg-zinc-600"
         >
           Update Account

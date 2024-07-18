@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useRef, useState } from "react";
 import { BsCloudUpload } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
-import MetaData from "../helpers/MetaData"
+import MetaData from "../helpers/MetaData";
 const Signup = () => {
   const [data, setData] = useState({
     username: "",
@@ -10,6 +10,9 @@ const Signup = () => {
     password: "",
     role: "user",
   });
+  const [meg, setMsg] = useState();
+
+  const btnRef = useRef();
 
   const navigate = useNavigate();
   const [image, setImage] = useState(null);
@@ -38,12 +41,15 @@ const Signup = () => {
     formData.append("role", data.role);
 
     try {
+      btnRef.current.disabled = true;
       const res = await axios.post("/api/v1/user/register", formData);
       if (res.data) {
         navigate("/login");
       }
     } catch (error) {
       console.log("sign up error ", error);
+      setMsg("Filled To Sign-Up");
+      btnRef.current.disabled = false;
     }
   };
   return (
@@ -123,10 +129,12 @@ const Signup = () => {
         </div>
         <button
           type="submit"
+          ref={btnRef}
           className="py-2 w-full px-3 rounded-lg text-md text-white font-semibold mt-5 bg-zinc-600"
         >
           Creare Account
         </button>
+        {meg && <p className="text-center my-2 text-lg text-red-600">{meg}</p>}
         <p className="my-2 text-center">
           Already have an account?{" "}
           <Link to="/login" className="text-blue-500 underline">
