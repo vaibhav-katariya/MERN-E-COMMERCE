@@ -39,7 +39,10 @@ const VerticalCardProduct = ({ keyword, heading }) => {
   const fetchData = async () => {
     setLoading(true);
     const getProduct = await axios.get(
-      `/api/v1/product/getProduct?keyword=${keyword}&price[gte]=${price[0]}&price[lte]=${price[1]}&ratings[gte]=${ratings}&page=${currentPage}`
+      `/api/v1/product/getProduct?keyword=${keyword}&price[gte]=${price[0]}&price[lte]=${price[1]}&ratings[gte]=${ratings}&page=${currentPage}`,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
     );
     setLoading(false);
     console.log(getProduct.data);
