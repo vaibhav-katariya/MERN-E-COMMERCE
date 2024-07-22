@@ -8,8 +8,7 @@ export default defineConfig({
     proxy: {
       "/api": {
         target: "https://mern-e-commerce-ulnh.onrender.com",
-        changeOrigin: true,
-        secure: false,
+        secure: true,
       },
     },
   },
