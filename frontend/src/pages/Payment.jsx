@@ -33,7 +33,7 @@ const Payment = () => {
     payBtn.current.disabled = true;
 
     try {
-      const { data } = await axios.post("https://mern-e-commerce-ulnh.onrender.com/api/v1/payment/process", paymentData);
+      const { data } = await axios.post("/api/v1/payment/process", paymentData);
 
       const client_secret = data.client_secret;
 
@@ -78,7 +78,7 @@ const Payment = () => {
             totalPrice: orderInfo.totalPrice,
           };
 
-          await axios.post("https://mern-e-commerce-ulnh.onrender.com/api/v1/order/create-oreder", order);
+          await axios.post("/api/v1/order/create-oreder", order);
 
           navigate("/success-order");
 

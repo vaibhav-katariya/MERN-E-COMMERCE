@@ -29,7 +29,7 @@ const UpdateUser = () => {
 
     try {
       btnRef.current.disabled = true;
-      const res = await axios.put("https://mern-e-commerce-ulnh.onrender.com/api/v1/user/update-user-details", formData);
+      const res = await axios.put("/api/v1/user/update-user-details", formData);
 
       if (res.data) {
         console.log(res.data.updateUser);

@@ -17,7 +17,7 @@ const UpdatePassword = () => {
     e.preventDefault();
     try {
       btnRef.current.disabled = true;
-      const res = await axios.put("https://mern-e-commerce-ulnh.onrender.com/api/v1/user/update-password", data);
+      const res = await axios.put("/api/v1/user/update-password", data);
       setMessage(res.data.message);
       btnRef.current.disabled = false;
     } catch (error) {

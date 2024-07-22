@@ -44,7 +44,7 @@ const Header = () => {
 
   const logoutHandler = async () => {
     try {
-      await axios.post("https://mern-e-commerce-ulnh.onrender.com/api/v1/user/logout");
+      await axios.post("/api/v1/user/logout");
       dispatch(logout());
       navigate("/login");
     } catch (error) {

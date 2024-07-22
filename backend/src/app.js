@@ -13,7 +13,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://shop-trend.onrender.com",
+    origin: process.env.CORS_ORIGIN,
     credentials: true,
   })
 );
@@ -24,7 +24,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files from the 'public' directory
-app.use(express.static(join(__dirname, 'public')));
+app.use(express.static(join(__dirname, "public")));
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

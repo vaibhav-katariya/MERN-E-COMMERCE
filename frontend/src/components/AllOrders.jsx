@@ -13,7 +13,7 @@ const AllOrders = () => {
 
   const deleteOrderHandler = async (id) => {
     try {
-      const res = await axios.delete(`https://mern-e-commerce-ulnh.onrender.com/api/v1/order/delete-order/${id}`);
+      const res = await axios.delete(`/api/v1/order/delete-order/${id}`);
       setAllOrders(allOrders.filter((order) => order._id !== id));
     } catch (error) {
       console.log(error);

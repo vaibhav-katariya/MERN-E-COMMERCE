@@ -10,7 +10,7 @@ const ProccessOrder = () => {
 
   useEffect(() => {
     const orderDetails = async () => {
-      const { data } = await axios.get(`https://mern-e-commerce-ulnh.onrender.com/api/v1/order/get-oreder/${id}`);
+      const { data } = await axios.get(`/api/v1/order/get-oreder/${id}`);
       setData(data.order);
       setStatus(data?.order?.orderStatus);
     };
@@ -20,7 +20,7 @@ const ProccessOrder = () => {
   const updateOrder = async (e) => {
     e.preventDefault();
     if (status !== "" || status !== null) {
-      const res = await axios.put(`https://mern-e-commerce-ulnh.onrender.com/api/v1/order/update-order/${id}`, {
+      const res = await axios.put(`/api/v1/order/update-order/${id}`, {
         status: status,
       });
 

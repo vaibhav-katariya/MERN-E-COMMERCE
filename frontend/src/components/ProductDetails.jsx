@@ -60,7 +60,7 @@ const ProductDetails = () => {
 
   const findProduct = async () => {
     try {
-      const response = await axios.get(`https://mern-e-commerce-ulnh.onrender.com/api/v1/product/getProductById/${id}`);
+      const response = await axios.get(`/api/v1/product/getProductById/${id}`);
       const product = response.data.product;
       setData(product);
       setActiveImage(product.productImages[0]);
@@ -88,7 +88,7 @@ const ProductDetails = () => {
   const fetchReviews = async (productId) => {
     try {
       const response = await axios.get(
-        `https://mern-e-commerce-ulnh.onrender.com/api/v1/product/getProductReviews/${productId}`
+        `/api/v1/product/getProductReviews/${productId}`
       );
       setReviews(response.data.data);
     } catch (error) {
@@ -148,7 +148,7 @@ const ProductDetails = () => {
   const HandleDelete = async (e, productId) => {
     try {
       const response = await axios.delete(
-        `https://mern-e-commerce-ulnh.onrender.com/api/v1/product/deleteProduct/${productId}`
+        `/api/v1/product/deleteProduct/${productId}`
       );
       console.log(response.data.message);
       navigate("/");
@@ -174,7 +174,7 @@ const ProductDetails = () => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `https://mern-e-commerce-ulnh.onrender.com/api/v1/product/updateProduct/${data?._id}`,
+        `/api/v1/product/updateProduct/${data?._id}`,
         formData
       );
       console.log(response.data.message);
@@ -188,7 +188,7 @@ const ProductDetails = () => {
   const handleAddReview = async () => {
     try {
       const response = await axios.post(
-        `https://mern-e-commerce-ulnh.onrender.com/api/v1/product/createReviews/${data?._id}`,
+        `/api/v1/product/createReviews/${data?._id}`,
         reviewData
       );
       console.log(response.data.message);
@@ -202,7 +202,7 @@ const ProductDetails = () => {
   const handleDeleteReview = async (reviewId) => {
     try {
       const response = await axios.delete(
-        `https://mern-e-commerce-ulnh.onrender.com/api/v1/product/deleteProductReview/${id}/${reviewId}`
+        `/api/v1/product/deleteProductReview/${id}/${reviewId}`
       );
       console.log(response.data.message);
       setReviews(reviews.filter((review) => review._id !== reviewId));

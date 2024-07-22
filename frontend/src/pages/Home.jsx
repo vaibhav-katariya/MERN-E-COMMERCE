@@ -24,7 +24,7 @@ const Home = () => {
     setError(null); // Reset error state
     try {
       const { data } = await axios.get(
-        `https://mern-e-commerce-ulnh.onrender.com/api/v1/product/getProduct?page=${currentPage}`
+        `/api/v1/product/getProduct?page=${currentPage}`
       );
       setResultPerPage(data.resultPerPage);
       setProductsCount(data.productCount);

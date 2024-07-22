@@ -131,9 +131,9 @@ const loginUser = async (req, res) => {
 
     const option = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'Lax',
+      secure: true,
     };
+
 
     res
       .status(200)
@@ -164,9 +164,9 @@ const logoutUser = async (req, res) => {
 
     const option = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'Lax',
+      secure: true,
     };
+
 
 
     res
@@ -354,8 +354,7 @@ const updateUserDetails = async (req, res) => {
 
     const option = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'Lax',
+      secure: true,
     };
 
     res

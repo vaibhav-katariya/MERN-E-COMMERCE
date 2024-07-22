@@ -23,7 +23,7 @@ const Alluser = () => {
 
   const fetchAllUser = async () => {
     try {
-      const res = await axios.get("https://mern-e-commerce-ulnh.onrender.com/api/v1/user/alluser");
+      const res = await axios.get("/api/v1/user/alluser");
       setAllUser(res.data.user);
     } catch (error) {
       console.log("error while fetching all users", error);
@@ -37,7 +37,7 @@ const Alluser = () => {
 
   const handleUpdateRole = async () => {
     try {
-      await axios.put("https://mern-e-commerce-ulnh.onrender.com/api/v1/user/changeRole", {
+      await axios.put("/api/v1/user/changeRole", {
         id: currentUser.id,
         role: currentUser.role,
       });
@@ -50,7 +50,7 @@ const Alluser = () => {
 
   const handleDeleteUser = async (id) => {
     try {
-      await axios.delete(`https://mern-e-commerce-ulnh.onrender.com/api/v1/user/deleteUser/${id}`);
+      await axios.delete(`/api/v1/user/deleteUser/${id}`);
       fetchAllUser();
     } catch (error) {
       console.log("error while deleting user", error);

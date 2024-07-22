@@ -7,11 +7,9 @@ const OrderDetails = () => {
 
   const [data, setData] = useState();
 
-  console.log(data);
-
   useEffect(() => {
     const orderDetails = async () => {
-      const { data } = await axios.get(`https://mern-e-commerce-ulnh.onrender.com/api/v1/order/get-oreder/${id}`);
+      const { data } = await axios.get(`/api/v1/order/get-oreder/${id}`);
       setData(data.order);
     };
     orderDetails();
@@ -64,7 +62,7 @@ const OrderDetails = () => {
                       Amount
                     </p>
                     <p className="font-medium text-lg leading-8 text-gray-600">
-                      {data?.totalPrice && data?.totalPrice}
+                      {data?.totalPrice && parseInt(data?.totalPrice)}
                     </p>
                   </div>
                   <div className="flex items-center justify-between gap-4 ">

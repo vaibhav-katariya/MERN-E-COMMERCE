@@ -67,7 +67,7 @@ const MyOrders = () => {
 
   useEffect(() => {
     const getMyOrder = async () => {
-      const { data } = await axios.get("https://mern-e-commerce-ulnh.onrender.com/api/v1/order/get-oreder");
+      const { data } = await axios.get("/api/v1/order/get-oreder");
       setOrders(data.orders);
     };
 

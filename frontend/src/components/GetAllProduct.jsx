@@ -17,7 +17,7 @@ const GetAllProduct = () => {
   const fetchAllProducts = async () => {
     try {
       const response = await axios.get(
-        `https://mern-e-commerce-ulnh.onrender.com/api/v1/product/getAllProduct`
+        `/api/v1/product/getAllProduct`
       );
       setAllProduct(response.data.product);
     } catch (error) {
@@ -30,7 +30,7 @@ const GetAllProduct = () => {
   const fetchAllProduct = async () => {
     try {
       const response = await axios.get(
-        `https://mern-e-commerce-ulnh.onrender.com/api/v1/product/getOwnerProduct/${user?.username}`
+        `/api/v1/product/getOwnerProduct/${user?.username}`
       );
       setData(response.data.data);
     } catch (error) {

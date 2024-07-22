@@ -14,9 +14,10 @@ const VerticalCardProduct = ({ keyword, heading }) => {
   const [price, setPrice] = useState([0, 25000]);
   const [ratings, setRatings] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [filterProduct, setFilterProduct] = useState(1);
   const [resultPerPage, setResultPerPage] = useState(6);
   const [productsCount, setProductsCount] = useState(1);
+  const [categoryProduct, setCategoryProduct] = useState([]);
+  const [filterCategory, setFilterCategory] = useState(null); // Null represents 'All Categories'
   const dispatch = useDispatch();
 
   const handleAddToCart = async (e, product) => {
@@ -38,15 +39,13 @@ const VerticalCardProduct = ({ keyword, heading }) => {
 
   const fetchData = async () => {
     setLoading(true);
-    const getProduct = await axios.get(
-      `https://mern-e-commerce-ulnh.onrender.com/api/v1/product/getProduct?keyword=${keyword}&price[gte]=${price[0]}&price[lte]=${price[1]}&ratings[gte]=${ratings}&page=${currentPage}`,
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    const query = `/api/v1/product/getProduct?keyword=${keyword}&price[gte]=${price[0]}&price[lte]=${price[1]}&ratings[gte]=${ratings}&page=${currentPage}`;
+    const categoryQuery = filterCategory ? `&category=${filterCategory}` : '';
+    const getProduct = await axios.get(query + categoryQuery);
+
+    const getCategoryProduct = await axios.get("/api/v1/product/getCategoryProduct");
+    setCategoryProduct([{ category: "All Categories" }, ...getCategoryProduct?.data?.categoryProduct]);
     setLoading(false);
-    console.log(getProduct.data);
-    setFilterProduct(getProduct.data.filterProductCount);
     setResultPerPage(getProduct.data.resultPerPage);
     setProductsCount(getProduct.data.productCount);
     setData(getProduct?.data.products);
@@ -54,13 +53,13 @@ const VerticalCardProduct = ({ keyword, heading }) => {
 
   useEffect(() => {
     fetchData();
-  }, [keyword, price, ratings, currentPage]);
+  }, [keyword, price, ratings, currentPage, filterCategory]);
 
   const totalPages = Math.ceil(productsCount / resultPerPage);
 
   return (
     <div className="container w-full flex md:flex-row flex-col my-6 mx-4 relative">
-      {data.length > 0 && (
+      {data?.length > 0 && (
         <>
           <div className="md:w-[25%] mx-5 sticky">
             <Typography>Price</Typography>
@@ -74,6 +73,19 @@ const VerticalCardProduct = ({ keyword, heading }) => {
                 max={25000}
               />
             </Box>
+
+            <Typography>Categories</Typography>
+            <ul className="my-4">
+              {categoryProduct.map((item) => (
+                <li
+                  className="my-1 cursor-pointer"
+                  key={item?.category}
+                  onClick={() => setFilterCategory(item.category === "All Categories" ? null : item.category)}
+                >
+                  {item.category}
+                </li>
+              ))}
+            </ul>
 
             <fieldset>
               <Typography component="legend">Ratings Above</Typography>
@@ -93,7 +105,7 @@ const VerticalCardProduct = ({ keyword, heading }) => {
         </>
       )}
       <div className="md:w-[70%] flex gap-2 flex-wrap">
-        {data.length > 0
+        {data?.length > 0
           ? loading
             ? loadingList.map((_, index) => (
                 <div
@@ -113,9 +125,8 @@ const VerticalCardProduct = ({ keyword, heading }) => {
                 </div>
               ))
             : data.map((product, index) => (
-                <div className="flex justify-between">
+                <div key={product._id} className="flex justify-between">
                   <Link
-                    key={index}
                     to={`/productDetails/${product?._id}`}
                     className=" w-[170px] md:w-[290px] bg-white rounded-lg shadow-lg transition-transform  overflow-hidden"
                   >
@@ -141,10 +152,7 @@ const VerticalCardProduct = ({ keyword, heading }) => {
                       {product.stock > 0 ? (
                         <button
                           className="font-semibold text-md bg-zinc-600 hover:bg-zinc-900 text-white px-3 py-[0.4rem] rounded-lg transition-all"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleAddToCart(e, product);
-                          }}
+                          onClick={(e) => handleAddToCart(e, product)}
                         >
                           Add to Cart
                         </button>
@@ -155,21 +163,20 @@ const VerticalCardProduct = ({ keyword, heading }) => {
                       )}
                     </div>
                   </Link>
-
-                  {totalPages > 1 && (
-                    <div className="absolute -bottom-10 end-10">
-                      <Stack spacing={2}>
-                        <Pagination
-                          count={totalPages}
-                          page={currentPage}
-                          onChange={handleChange}
-                        />
-                      </Stack>
-                    </div>
-                  )}
                 </div>
               ))
           : "product not found"}
+        {totalPages > 1 && (
+          <div className="absolute -bottom-10 end-10">
+            <Stack spacing={2}>
+              <Pagination
+                count={totalPages}
+                page={currentPage}
+                onChange={handleChange}
+              />
+            </Stack>
+          </div>
+        )}
       </div>
     </div>
   );
