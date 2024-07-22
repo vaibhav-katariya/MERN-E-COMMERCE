@@ -7,8 +7,13 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://mern-e-commerce-bqou.onrender.com",
+        target: "https://mern-e-commerce-ulnh.onrender.com",
+        changeOrigin: true,
+        secure: false,
       },
     },
+  },
+  build: {
+    chunkSizeWarningLimit: 1000, // Adjust the value as needed (size in KB)
   },
 });
