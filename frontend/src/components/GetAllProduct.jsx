@@ -16,7 +16,9 @@ const GetAllProduct = () => {
 
   const fetchAllProducts = async () => {
     try {
-      const response = await axios.get(`https://mern-e-commerce-ulnh.onrender.com/api/v1/product/getAllProduct`);
+      const response = await axios.get(
+        `https://mern-e-commerce-ulnh.onrender.com/api/v1/product/getAllProduct`
+      );
       setAllProduct(response.data.product);
     } catch (error) {
       console.log("Error while fetching all products:", error);
