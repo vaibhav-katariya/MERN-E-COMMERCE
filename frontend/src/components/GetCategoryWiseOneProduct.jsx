@@ -9,7 +9,7 @@ const GetCategoryWiseOneProduct = () => {
   const categoryLoading = new Array(13).fill(null);
 
   const fetchCategoryProduct = async () => {
-    const product = await axios.get("/api/v1/product/getCategoryProduct");
+    const product = await axios.get("https://mern-e-commerce-ulnh.onrender.com/api/v1/product/getCategoryProduct");
     setCategoryProduct(product.data.categoryProduct);
     setLoading(false);
   };
