@@ -24,7 +24,7 @@ const Login = () => {
     e.preventDefault();
     try {
       btnRef.current.disabled = true;
-      const res = await axios.post("/api/v1/user/login", data);
+      const res = await axios.post("https://mern-e-commerce-ulnh.onrender.com/api/v1/user/login", data);
       if (res.status === 200) {
         dispatch(login(res.data.loginUser));
         navigate("/");

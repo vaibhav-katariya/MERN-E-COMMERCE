@@ -11,7 +11,7 @@ const OrderDetails = () => {
 
   useEffect(() => {
     const orderDetails = async () => {
-      const { data } = await axios.get(`/api/v1/order/get-oreder/${id}`);
+      const { data } = await axios.get(`https://mern-e-commerce-ulnh.onrender.com/api/v1/order/get-oreder/${id}`);
       setData(data.order);
     };
     orderDetails();

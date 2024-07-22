@@ -34,7 +34,7 @@ const UploadProduct = () => {
 
     try {
       btnRef.current.disabled = true;
-      const res = await axios.post("/api/v1/product/upload", formData);
+      const res = await axios.post("https://mern-e-commerce-ulnh.onrender.com/api/v1/product/upload", formData);
       if (res.data) {
         setMessage("Product uploaded successfully!");
         setData({

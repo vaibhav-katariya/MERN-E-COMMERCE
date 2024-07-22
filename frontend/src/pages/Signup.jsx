@@ -42,7 +42,7 @@ const Signup = () => {
 
     try {
       btnRef.current.disabled = true;
-      const res = await axios.post("/api/v1/user/register", formData);
+      const res = await axios.post("https://mern-e-commerce-ulnh.onrender.com/api/v1/user/register", formData);
       if (res.data) {
         navigate("/login");
       }
