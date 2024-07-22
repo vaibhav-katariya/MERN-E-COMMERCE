@@ -1,10 +1,16 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import helmet from 'helmet'
-import path from 'path'
+import helmet from "helmet";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+
+// Define __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
+
 app.use(
   cors({
     origin: "https://shop-trend.onrender.com",
@@ -16,16 +22,16 @@ app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')))
 
+// Serve static files from the 'public' directory
+app.use(express.static(join(__dirname, 'public')));
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Something broke!");
 });
 
-// routes
-
+// Import and use routes
 import userRoutes from "./routes/user.routes.js";
 import productRoutes from "./routes/product.routes.js";
 import orderRoutes from "./routes/order.routes.js";
