@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import helmet from 'helmet'
+import path from 'path'
 
 const app = express();
 app.use(
@@ -15,7 +16,7 @@ app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, 'public')))
 
 
 app.use((err, req, res, next) => {
