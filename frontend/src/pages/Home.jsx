@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import GetCategoryWiseOneProduct from "../components/GetCategoryWiseOneProduct";
-import { Box, Pagination, Stack } from "@mui/material";
+import { Pagination, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
 import { addcart } from "../store/cartSlice";
 import { useDispatch } from "react-redux";
 import MetaData from "../helpers/MetaData";
-import axiosInstance from "../helpers/AxiosInstance"; // Import the custom Axios instance
+import axios from "axios";
 
 const Home = () => {
   const [data, setData] = useState([]);
@@ -23,8 +23,8 @@ const Home = () => {
     setLoading(true);
     setError(null); // Reset error state
     try {
-      const { data } = await axiosInstance.get(
-        `/product/getProduct?page=${currentPage}`
+      const { data } = await axios.get(
+        `api/v1/product/getProduct?page=${currentPage}`
       );
       setResultPerPage(data.resultPerPage);
       setProductsCount(data.productCount);
