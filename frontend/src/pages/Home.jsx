@@ -24,7 +24,7 @@ const Home = () => {
     setError(null); // Reset error state
     try {
       const { data } = await axios.get(
-        `api/v1/product/getProduct?page=${currentPage}`
+        `/api/v1/product/getProduct?page=${currentPage}`
       );
       setResultPerPage(data.resultPerPage);
       setProductsCount(data.productCount);
