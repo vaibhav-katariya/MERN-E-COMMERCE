@@ -131,9 +131,9 @@ const loginUser = async (req, res) => {
 
     const option = {
       httpOnly: true,
+      sameSite: "none",
       secure: true,
     };
-
 
     res
       .status(200)
@@ -164,10 +164,9 @@ const logoutUser = async (req, res) => {
 
     const option = {
       httpOnly: true,
+      sameSite: "none",
       secure: true,
     };
-
-
 
     res
       .status(200)
@@ -354,6 +353,7 @@ const updateUserDetails = async (req, res) => {
 
     const option = {
       httpOnly: true,
+      sameSite: "none",
       secure: true,
     };
 
