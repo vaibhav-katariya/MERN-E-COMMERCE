@@ -13,7 +13,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "*",
+    origin: 'https://shop-trend-ruby.vercel.app',
     credentials: true,
     allowedHeaders: "Content-Type,Authorization",
   })
