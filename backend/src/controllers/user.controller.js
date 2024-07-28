@@ -74,7 +74,7 @@ const registerUser = async (req, res) => {
     await sendEmail({
       email: createdUser.email,
       subject: "Welcome to the app",
-      html: `<h1>hello ${createdUser.username} </br>  Welcome to the shop-trend </h1>`,
+      html: `<h1>hello user ,</br> Welcome to the shop-trend </h1>`,
     });
 
     if (!createdUser) {
@@ -130,12 +130,11 @@ const loginUser = async (req, res) => {
     );
 
 
-    // await sendEmail({
-    //   email: loginUser.email,
-    //   subject: "Welcome to the app",
-    //   html: `<h1>hello ${loginUser.username} </br>  Welcome to the shop-trend </h1>`,
-    // });
-
+    await sendEmail({
+      email: loginUser.email,
+      subject: "Welcome to the app",
+      html: `<h1>hello User , </br>  Welcome to the shop-trend </h1>`,
+    });
 
     const option = {
       httpOnly: true,
@@ -366,11 +365,11 @@ const updateUserDetails = async (req, res) => {
     );
 
 
-    // await sendEmail({
-    //   email: updateUser.email,
-    //   subject: "Chnage Your Account Details",
-    //   html: `<h1>hello ${updateUser.username} </br> Your Account details changed successfully </h1>`,
-    // });
+    await sendEmail({
+      email: updateUser.email,
+      subject: "Chnage Your Account Details",
+      html: `<h1>hello User, </br> Your Account details changed successfully </h1>`,
+    });
 
     const option = {
       httpOnly: true,
