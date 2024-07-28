@@ -74,7 +74,7 @@ const registerUser = async (req, res) => {
     await sendEmail({
       email: createdUser.email,
       subject: "Welcome to the app",
-      html: `<h1>hello user ,</br> Welcome to the shop-trend </h1>`,
+      html: `<h1>hello user Welcome to the shop-trend </h1>`,
     });
 
     if (!createdUser) {
