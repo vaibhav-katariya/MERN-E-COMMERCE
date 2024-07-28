@@ -71,11 +71,11 @@ const registerUser = async (req, res) => {
 
     const createdUser = await User.findById(user._id).select("-password");
 
-    await sendEmail({
-      email: createdUser.email,
-      subject: "Welcome to the app",
-      html: `<h1>hello user Welcome to the shop-trend </h1>`,
-    });
+    // await sendEmail({
+    //   email: createdUser.email,
+    //   subject: "Welcome to the app",
+    //   html: `<h1>hello user Welcome to the shop-trend </h1>`,
+    // });
 
     if (!createdUser) {
       return res.status(500).json({
@@ -130,11 +130,11 @@ const loginUser = async (req, res) => {
     );
 
 
-    await sendEmail({
-      email: loginUser.email,
-      subject: "Welcome to the app",
-      html: `<h1>hello User , </br>  Welcome to the shop-trend </h1>`,
-    });
+    // await sendEmail({
+    //   email: loginUser.email,
+    //   subject: "Welcome to the app",
+    //   html: `<h1>hello User , </br>  Welcome to the shop-trend </h1>`,
+    // });
 
     const option = {
       httpOnly: true,
@@ -225,11 +225,11 @@ const changePassword = async (req, res) => {
     user.password = newPassword;
     await user.save({ validateBeforeSave: false });
 
-    await sendEmail({
-      email: user.email,
-      subject: "Chnage Your Password",
-      html: `<h1>hello ${user.username} </br> Your password changed successfully  </h1>`,
-    });
+    // await sendEmail({
+    //   email: user.email,
+    //   subject: "Chnage Your Password",
+    //   html: `<h1>hello ${user.username} </br> Your password changed successfully  </h1>`,
+    // });
 
     res.status(200).json({
       message: "password updated successfully",
@@ -365,11 +365,11 @@ const updateUserDetails = async (req, res) => {
     );
 
 
-    await sendEmail({
-      email: updateUser.email,
-      subject: "Chnage Your Account Details",
-      html: `<h1>hello User, </br> Your Account details changed successfully </h1>`,
-    });
+    // await sendEmail({
+    //   email: updateUser.email,
+    //   subject: "Chnage Your Account Details",
+    //   html: `<h1>hello User, </br> Your Account details changed successfully </h1>`,
+    // });
 
     const option = {
       httpOnly: true,
