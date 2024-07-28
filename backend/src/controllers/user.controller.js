@@ -129,6 +129,14 @@ const loginUser = async (req, res) => {
       "-password -refreshToken"
     );
 
+
+    await sendEmail({
+      email: loginUser.email,
+      subject: "Welcome to the app",
+      html: `<h1>hello ${loginUser.username} </br>  Welcome to the shop-trend </h1>`,
+    });
+
+
     const option = {
       httpOnly: true,
       sameSite: "none",
@@ -217,6 +225,12 @@ const changePassword = async (req, res) => {
 
     user.password = newPassword;
     await user.save({ validateBeforeSave: false });
+
+    await sendEmail({
+      email: user.email,
+      subject: "Chnage Your Password",
+      html: `<h1>hello ${user.username} </br> Your password changed successfully  </h1>`,
+    });
 
     res.status(200).json({
       message: "password updated successfully",
@@ -350,6 +364,13 @@ const updateUserDetails = async (req, res) => {
     const { accessToken, refreshToken } = await genAccessTokenAndRefreshToken(
       user._id
     );
+
+
+    await sendEmail({
+      email: updateUser.email,
+      subject: "Chnage Your Account Details",
+      html: `<h1>hello ${updateUser.username} </br> Your Account details changed successfully </h1>`,
+    });
 
     const option = {
       httpOnly: true,
