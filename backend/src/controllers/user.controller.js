@@ -118,7 +118,7 @@ const loginUser = async (req, res) => {
     const { token } = await genToken(user._id);
 
     const loginUser = await User.findById(user._id).select(
-      "-password -refreshToken"
+      "-password"
     );
 
     // await sendEmail({
