@@ -1,4 +1,4 @@
-import { Error } from "mongoose";
+// import { Error } from "mongoose";
 import { User } from "../model/user.model.js";
 import {
   fileDeleteOnCloudinary,
@@ -114,7 +114,6 @@ const loginUser = async (req, res) => {
 
     const { token } = await genToken(user._id);
     console.log(token);
-    
 
     const loginUser = await User.findById(user._id).select("-password");
 
