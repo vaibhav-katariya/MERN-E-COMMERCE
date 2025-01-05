@@ -266,7 +266,7 @@ const getAllUser = async (req, res) => {
       });
     }
 
-    const user = await User.find().select("-password -refreshToken");
+    const user = await User.find().select("-password");
 
     res.status(200).json({
       user,
