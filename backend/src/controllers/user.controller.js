@@ -9,7 +9,7 @@ const genToken = async (userId) => {
   try {
     const user = await User.findById(userId);
 
-    const token = await user.genToken();
+    const token = user.genToken();
 
     return { token };
   } catch (error) {
