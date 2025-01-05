@@ -1,23 +1,17 @@
 import { Error } from "mongoose";
 import { User } from "../model/user.model.js";
-import jwt from "jsonwebtoken";
 import {
   fileDeleteOnCloudinary,
   fileUploadOnCloudinary,
 } from "../utils/fileUploader.js";
-import { sendEmail } from "../utils/sendMail.js";
 
-const genAccessTokenAndRefreshToken = async (userId) => {
+const genToken = async (userId) => {
   try {
     const user = await User.findById(userId);
 
-    const refreshToken = user.genRefreshToken();
-    const accessToken = user.genAccessToken();
+    const token = await user.genToken();
 
-    user.refreshToken = refreshToken;
-    await user.save({ validateBeforeSave: false });
-
-    return { accessToken, refreshToken };
+    return { token };
   } catch (error) {
     throw new Error(
       "Something went wrong while generating access token and refresh token"
@@ -121,14 +115,11 @@ const loginUser = async (req, res) => {
       });
     }
 
-    const { accessToken, refreshToken } = await genAccessTokenAndRefreshToken(
-      user._id
-    );
+    const { token } = await genToken(user._id);
 
     const loginUser = await User.findById(user._id).select(
       "-password -refreshToken"
     );
-
 
     // await sendEmail({
     //   email: loginUser.email,
@@ -142,13 +133,9 @@ const loginUser = async (req, res) => {
       secure: true,
     };
 
-    res
-      .status(200)
-      .cookie("accessToken", accessToken, option)
-      .cookie("refreshToken", refreshToken, option)
-      .json({
-        loginUser,
-      });
+    res.status(200).cookie("token", token, option).json({
+      loginUser,
+    });
   } catch (error) {
     console.error("Error while login the user:", error);
     res.status(500).json({
@@ -158,30 +145,22 @@ const loginUser = async (req, res) => {
 };
 
 const logoutUser = async (req, res) => {
-  try {
-    await User.findByIdAndUpdate(
-      req.user._id,
-      {
-        $set: { refreshToken: "" },
-      },
-      {
-        new: true,
-      }
-    );
+  if (!req.user) {
+    res.json({
+      message: "user not exist",
+    });
+  }
 
+  try {
     const option = {
       httpOnly: true,
       sameSite: "none",
       secure: true,
     };
 
-    res
-      .status(200)
-      .clearCookie("accessToken", option)
-      .clearCookie("refreshToken", option)
-      .json({
-        message: "User logged out successfully",
-      });
+    res.status(200).clearCookie("token", option).json({
+      message: "User logged out successfully",
+    });
   } catch (error) {
     console.error("Error while logout the user:", error);
     res.status(500).json({
@@ -244,9 +223,7 @@ const changePassword = async (req, res) => {
 
 const getCorrentUser = async (req, res) => {
   try {
-    const user = await User.findById(req.user?._id).select(
-      "-password -refreshToken"
-    );
+    const user = await User.findById(req.user?._id).select("-password ");
 
     if (!user) {
       return res.status(400).json({
@@ -360,10 +337,7 @@ const updateUserDetails = async (req, res) => {
       });
     }
 
-    const { accessToken, refreshToken } = await genAccessTokenAndRefreshToken(
-      user._id
-    );
-
+    const { token } = await genToken(user._id);
 
     // await sendEmail({
     //   email: updateUser.email,
@@ -377,14 +351,10 @@ const updateUserDetails = async (req, res) => {
       secure: true,
     };
 
-    res
-      .status(200)
-      .cookie("accessToken", accessToken, option)
-      .cookie("refreshToken", refreshToken, option)
-      .json({
-        message: "User details updated successfully",
-        updateUser,
-      });
+    res.status(200).cookie("token", token, option).json({
+      message: "User details updated successfully",
+      updateUser,
+    });
   } catch (error) {
     console.error("Error while update the user:", error);
     res.status(500).json({
