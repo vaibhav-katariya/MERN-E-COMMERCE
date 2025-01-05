@@ -14,7 +14,7 @@ const genToken = async (userId) => {
     return { token };
   } catch (error) {
     throw new Error(
-      "Something went wrong while generating access token and refresh token"
+      "Something went wrong while generating access token and refresh token" , error
     );
   }
 };
