@@ -10,12 +10,9 @@ const genToken = async (userId) => {
     const user = await User.findById(userId);
 
     const token = user.genToken();
-
     return { token };
   } catch (error) {
-    throw new Error(
-      "Something went wrong while generating access token and refresh token" , error
-    );
+    throw new Error("Something went wrong while generating token", error);
   }
 };
 
@@ -116,10 +113,10 @@ const loginUser = async (req, res) => {
     }
 
     const { token } = await genToken(user._id);
+    console.log(token);
+    
 
-    const loginUser = await User.findById(user._id).select(
-      "-password"
-    );
+    const loginUser = await User.findById(user._id).select("-password");
 
     // await sendEmail({
     //   email: loginUser.email,
